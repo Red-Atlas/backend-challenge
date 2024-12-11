@@ -1,5 +1,5 @@
-import Property from "../repositories/property.rep";
+import Property from "../services/property.service";
 
-class PropertyService {}
+class PropertyController {}
 
-export default PropertyService;
+export default PropertyController;

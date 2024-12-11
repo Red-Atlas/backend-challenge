@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "./utils/envAction.util";
 
 import { PORT } from "./constants";
 
@@ -11,7 +12,7 @@ async function main() {
 
     app.listen(PORT, () => console.log("server listening on port", PORT));
   } catch (error) {
-    console.log("Error during app initializing");
+    console.log("Error during app initializing", error);
   }
 }
 

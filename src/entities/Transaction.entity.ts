@@ -3,11 +3,11 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import { Advertisement } from "./Advertisement.entity";
 
 enum Type {
-  sale_purchase,
-  lease,
-  mortgage,
-  judicialSale,
-  other,
+  SALE_PURCHASE = "sale_purchase",
+  LEASE = "lease",
+  MORTGAGE = "mortgage",
+  JUDICIAL_SALE = "judicialSale",
+  OTHER = "other",
 }
 
 @Entity()

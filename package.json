@@ -4,7 +4,7 @@
   "description": "## Descripción",
   "main": "index.js",
   "scripts": {
-    "dev": "tsnd src/index.ts",
+    "dev": "tsnd src/index.ts --env development",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -12,9 +12,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "commander": "^12.1.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "pg": "^8.4.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "0.3.20",
@@ -22,6 +27,9 @@
   },
   "devDependencies": {
     "@types/node": "^16.11.10",
+    "@types/passport": "^1.0.17",
+    "@types/passport-local": "^1.0.38",
+    "dotenv": "^16.4.7",
     "ts-node": "10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "4.5.2"

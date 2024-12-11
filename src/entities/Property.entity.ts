@@ -3,10 +3,10 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Advertisement } from "./Advertisement.entity";
 
 enum Sector {
-  residential,
-  commercial,
-  industrial,
-  agricultural,
+  RESIDENTIAL = "residential",
+  COMMERCIAL = "commercial",
+  INDUSTRIAL = "industrial",
+  AGRICULTURAL = "agricultural",
 }
 
 @Entity()

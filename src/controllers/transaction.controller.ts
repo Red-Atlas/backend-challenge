@@ -1,5 +1,5 @@
-import Transaction from "../repositories/transaction.rep";
+import Transaction from "../services/transaction.service";
 
-class TransactionService {}
+class TransactionController {}
 
-export default TransactionService;
+export default TransactionController;

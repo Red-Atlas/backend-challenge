@@ -10,16 +10,16 @@ import { Property } from "./Property.entity";
 import { Transaction } from "./Transaction.entity";
 
 enum PropertyType {
-  apartment,
-  house,
-  retail,
-  land,
-  industrial,
+  APARTMENT = "apartment",
+  HOUSE = "house",
+  RETAIL = "retail",
+  LAND = "land",
+  INDUSTRIAL = "industrial",
 }
 
 enum Status {
-  for_sale,
-  for_lease,
+  FOR_SALE = "for_sale",
+  FOR_LEASE = "for_lease",
 }
 
 @Entity()

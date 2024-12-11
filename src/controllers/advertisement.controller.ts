@@ -1,5 +1,5 @@
-import Advertisement from "../repositories/advertisement.rep";
+import Advertisement from "../services/advertisement.service";
 
-class AdvertisementService {}
+class AdvertisementController {}
 
-export default AdvertisementService;
+export default AdvertisementController;
