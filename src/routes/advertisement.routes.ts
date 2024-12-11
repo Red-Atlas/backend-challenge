@@ -1,13 +1,13 @@
 import { Router } from "express";
 
-import Advertisement from "../controllers/advertisement.controller";
+import advertisement from "../controllers/advertisement.controller";
 
 const router = Router();
 
-router.post("/", Advertisement.create);
-router.get("/", Advertisement.findAll);
-router.get("/:id", Advertisement.findById);
-router.patch("/:id", Advertisement.updateById);
-router.delete("/:id", Advertisement.deleteById);
+router.post("/", advertisement.create);
+router.get("/", advertisement.findAll);
+router.get("/:id", advertisement.findById);
+router.patch("/:id", advertisement.updateById);
+router.delete("/:id", advertisement.deleteById);
 
 export default router;

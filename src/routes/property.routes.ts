@@ -1,13 +1,13 @@
 import { Router } from "express";
 
-import Property from "../controllers/property.controller";
+import property from "../controllers/property.controller";
 
 const router = Router();
 
-router.post("/", Property.create);
-router.get("/", Property.findAll);
-router.get("/:id", Property.findById);
-router.patch("/:id", Property.updateById);
-router.delete("/:id", Property.deleteById);
+router.post("/", property.create);
+router.get("/", property.findAll);
+router.get("/:id", property.findById);
+router.patch("/:id", property.updateById);
+router.delete("/:id", property.deleteById);
 
 export default router;

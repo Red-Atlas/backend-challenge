@@ -2,10 +2,9 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
-import users from "../repositories/user.rep";
-import auth from "../repositories/auth.rep";
+import User from "../services/user.service";
 
-import { createSaltAndHash, genSalt } from "../utils/hash.util";
+import { createSaltAndHash } from "../utils/hash.util";
 import { createToken } from "../utils/jtw.util";
 
 passport.use(
@@ -14,7 +13,7 @@ passport.use(
     { usernameField: "email" },
     async (email, password, done) => {
       try {
-        const searchedUser = await users.findOneBy({ email });
+        const searchedUser = await User.findOne({ email });
 
         if (searchedUser)
           return done(null, false, {
@@ -22,15 +21,7 @@ passport.use(
             statusCode: 400,
           } as any);
 
-        const userInstance = users.create({ email });
-        const user = await users.save(userInstance);
-
-        const authSchema = auth.create({
-          password: createSaltAndHash(password, genSalt()),
-          user,
-        });
-
-        await auth.save(authSchema);
+        const user = User.create({ email, password });
 
         done(null, user);
       } catch (error) {
@@ -46,7 +37,7 @@ passport.use(
     { passReqToCallback: true, usernameField: "email" },
     async (req, email, incomingPassword, done) => {
       try {
-        const searchedUser = await users.findOne({
+        const searchedUser = await User.findOne({
           where: { email },
           relations: {
             auth: true,
@@ -88,7 +79,7 @@ passport.use(
       secretOrKey: process.env.JWT_SECRET,
     },
     async (payload: { id: number; role: number }, done) => {
-      const searchedUser = await users.findOne({
+      const searchedUser = await User.findOne({
         where: { id: payload.id },
       });
 
