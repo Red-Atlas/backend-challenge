@@ -1,5 +1,5 @@
-class PropertyDTO {
+class AdvertisementDTO {
   constructor(data) {}
 }
 
-export default PropertyDTO;
+export default AdvertisementDTO;

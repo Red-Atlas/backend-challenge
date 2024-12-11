@@ -11,8 +11,8 @@ import { createToken } from "../utils/jtw.util";
 passport.use(
   "register",
   new LocalStrategy(
-    { passReqToCallback: true, usernameField: "email" },
-    async (req, email, password, done) => {
+    { usernameField: "email" },
+    async (email, password, done) => {
       try {
         const searchedUser = await users.findOneBy({ email });
 
@@ -46,11 +46,12 @@ passport.use(
     { passReqToCallback: true, usernameField: "email" },
     async (req, email, incomingPassword, done) => {
       try {
-        const searchedUser = await users
-          .createQueryBuilder("user")
-          .leftJoinAndSelect("user.auth", "auth")
-          .where("user.email = :email", { email })
-          .getOne();
+        const searchedUser = await users.findOne({
+          where: { email },
+          relations: {
+            auth: true,
+          },
+        });
 
         if (!searchedUser)
           return done(null, false, "Email no encontrado" as any);
@@ -66,10 +67,43 @@ passport.use(
           role: searchedUser.auth.role,
         });
 
-        done(null, searchedUser);
+        const user = {
+          id: searchedUser.id,
+          email: searchedUser.email,
+        };
+
+        done(null, user);
       } catch (error) {
         done(error);
       }
+    }
+  )
+);
+
+passport.use(
+  "jwt",
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.JWT_SECRET,
+    },
+    async (payload: { id: number; role: number }, done) => {
+      const searchedUser = await users.findOne({
+        where: { id: payload.id },
+      });
+
+      if (!searchedUser)
+        return done(null, false, {
+          message: "No existe el usuario indicado",
+        });
+
+      const user = {
+        id: searchedUser.id,
+        email: searchedUser.email,
+        role: searchedUser.auth.role,
+      };
+
+      done(null, user);
     }
   )
 );

@@ -1,5 +1,5 @@
-import Property from "../repositories/property.rep";
+import Advertisement from "../repositories/advertisement.rep";
 
-class PropertyService {}
+class AdvertisementService {}
 
-export default PropertyService;
+export default AdvertisementService;

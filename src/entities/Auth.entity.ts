@@ -7,12 +7,7 @@ import {
 } from "typeorm";
 
 import { User } from "./User.entity";
-
-enum Role {
-  "PUBLIC" = 0,
-  "USER" = 1,
-  "ADMIN" = 2,
-}
+import { Role } from "../schemas/role.enum";
 
 @Entity()
 class Auth {

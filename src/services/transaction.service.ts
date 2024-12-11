@@ -1,5 +1,5 @@
-import Property from "../repositories/property.rep";
+import Transaction from "../repositories/transaction.rep";
 
-class PropertyService {}
+class TransactionService {}
 
-export default PropertyService;
+export default TransactionService;
