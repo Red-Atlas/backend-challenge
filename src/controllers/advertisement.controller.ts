@@ -1,42 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-
 import Advertisement from "../services/advertisement.service";
+import BaseController from "./base.controller";
 
-class AdvertisementController {
-  static async create(req: Request, res: Response, next: NextFunction) {
-    try {
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async findAll(req: Request, res: Response, next: NextFunction) {
-    try {
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async findById(req: Request, res: Response, next: NextFunction) {
-    try {
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async updateById(req: Request, res: Response, next: NextFunction) {
-    try {
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async deleteById(req: Request, res: Response, next: NextFunction) {
-    try {
-    } catch (error) {
-      next(error);
-    }
+class AdvertisementController extends BaseController {
+  constructor() {
+    super(Advertisement);
   }
 }
 
-export default AdvertisementController;
+export default new AdvertisementController();
