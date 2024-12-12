@@ -18,7 +18,7 @@ class Property {
   address: string;
 
   @Column()
-  area: string;
+  area: number;
 
   @Column()
   ownerName: string;

@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  Index,
 } from "typeorm";
 
 import { Property } from "./Property.entity";
@@ -29,8 +30,11 @@ class Advertisement {
 
   @Column({
     type: "decimal",
+    precision: 10,
+    scale: 2,
   })
-  price: string;
+  @Index()
+  price: number;
 
   @Column({ type: "enum", enum: Status })
   status: string;

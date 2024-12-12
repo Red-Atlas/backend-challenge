@@ -3,6 +3,8 @@ import Advertisement from "../repositories/advertisement.rep";
 class AdvertisementService {
   static async create(data) {
     try {
+      const advertisementEntity = Advertisement.create(data);
+      await Advertisement.save(advertisementEntity);
     } catch (error) {
       throw error;
     }

@@ -12,7 +12,7 @@ class PropertyService {
 
   static async findAll(query) {
     try {
-      return await Property.findAndCount();
+      return await Property.findAndCount({});
     } catch (error) {
       throw error;
     }
@@ -23,6 +23,18 @@ class PropertyService {
       return await Property.findOne({
         where: { id },
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getValuation(query) {
+    try {
+      return await Property.createQueryBuilder("property")
+        .innerJoin("property.advertisements", "advertisement")
+        .select("property.address", "propertyAddress")
+        .addSelect("property.area * advertisement.price", "valuation")
+        .getRawMany();
     } catch (error) {
       throw error;
     }
