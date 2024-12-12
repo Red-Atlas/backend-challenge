@@ -11,7 +11,8 @@ export default [
   ...tseslint.configs.recommended,
   {
     rules: {
-        'no-ununsed-vars': 'off',
+      'no-ununsed-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn'
     }
   }
 ];

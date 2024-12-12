@@ -6,17 +6,23 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "tsx watch src/index.ts",
+    "dev": "npm run build && tsx watch src/index.ts",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typeorm": "typeorm-ts-node-esm -d ./src/db.ts",
+    "m:gen": "npm run typeorm migration:generate",
+    "m:run": "npm run typeorm migration:run"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "argon2": "^0.41.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20"
@@ -25,6 +31,7 @@
     "@eslint/js": "^9.16.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -32,6 +39,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.13.0",
     "prettier": "^3.4.2",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
