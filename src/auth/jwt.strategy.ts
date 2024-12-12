@@ -1,7 +1,6 @@
-import { IsEmail } from 'class-validator';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -26,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       userId: payload.id,
       username: payload.username,
       email: payload.email,
-      role: payload.user,
+      role: payload.role,
     };
   }
 }
