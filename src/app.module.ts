@@ -11,6 +11,7 @@ import { User } from './users/entities/user.entity';
 import { Property } from './properties/entities/property.entity';
 import { Listing } from './listings/entities/listing.entity';
 import { Transaction } from './transactions/entities/transaction.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { Transaction } from './transactions/entities/transaction.entity';
     PropertiesModule,
     ListingsModule,
     TransactionsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
