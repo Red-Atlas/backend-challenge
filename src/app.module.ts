@@ -15,23 +15,29 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-        entities: [User, Property, Listing, Transaction],
-        migrations: [__dirname + '/../migrations/*{.ts,.js}'],
-        migrationsRun: true,
-        synchronize: true, // No usar en producción
-        logging: true,
-      }),
-      inject: [ConfigService], // Inyectar ConfigService en la fábrica
+      useFactory: async (configService: ConfigService) => {
+        console.log('DB_HOST:', configService.get('DB_HOST'));
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: configService.get<number>('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_NAME'),
+          entities: [User, Property, Listing, Transaction],
+          migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+          migrationsRun: true,
+          synchronize: true,
+          logging: true,
+        };
+      },
+      inject: [ConfigService],
     }),
     UsersModule,
     PropertiesModule,

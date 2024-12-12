@@ -10,12 +10,14 @@ import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/entities/user.entity';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async register(createAuthDto: CreateAuthDto): Promise<{ message: string }> {
@@ -58,7 +60,7 @@ export class AuthService {
 
   async login(
     loginAuthDto: LoginAuthDto,
-  ): Promise<{ message: string; user?: User }> {
+  ): Promise<{ message: string; token?: string }> {
     const { email, username, password } = loginAuthDto;
 
     try {
@@ -84,8 +86,15 @@ export class AuthService {
         // Si la contraseña no es válida, lanzamos un error
         throw new BadRequestException('Invalid credentials');
       }
+      const payload = {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      };
 
-      return { message: 'Login successful', user };
+      const token = this.jwtService.sign(payload);
+
+      return { message: 'Login successful', token };
     } catch (error) {
       // Lanza el error si no se encuentra el usuario o si la contraseña es incorrecta
       if (
