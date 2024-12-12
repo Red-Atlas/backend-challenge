@@ -5,19 +5,22 @@ import property from "./property.routes";
 import transactions from "./transaction.routes";
 import advertisements from "./advertisement.routes";
 
+import queryBuilder from "../middlewares/queryBuilder";
 import checkRole from "../middlewares/checkRole.mid";
-import { Role } from "../schemas/role.enum";
 import passportCb from "../middlewares/passportCb.mid";
+
+import { Role } from "../schemas/role.enum";
 
 const router = Router();
 
 router.use("/auth", auth);
 router.use(
   "/properties",
+  queryBuilder,
   /*passportCb("jwt"), checkRole([Role.USER]),*/
   property
 );
-router.use("/transactions", transactions);
-router.use("/advertisement", advertisements);
+router.use("/transactions", queryBuilder, transactions);
+router.use("/advertisement", queryBuilder, advertisements);
 
 export default router;
