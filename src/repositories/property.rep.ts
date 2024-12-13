@@ -55,6 +55,20 @@ const PropertyRepository = AppDataSource.getRepository(Property).extend({
       .orderBy("count", "DESC")
       .getRawMany();
   },
+
+  async getAveragePriceBySector() {
+    const queryBuilder = this.createQueryBuilder(
+      "property"
+    ) as SelectQueryBuilder<Property>;
+
+    return await queryBuilder
+      .innerJoin("property.advertisements", "advertisement")
+      .select("property.sector", "sector")
+      .addSelect("AVG(advertisement.price)", "averagePrice")
+      .groupBy("property.sector")
+      .orderBy("averagePrice", "DESC")
+      .getRawMany();
+  },
 });
 
 export default PropertyRepository;

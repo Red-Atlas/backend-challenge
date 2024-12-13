@@ -17,6 +17,20 @@ class PropertyController extends BaseController {
       next(error);
     }
   }
+
+  async getAveragePriceBySector(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const data = await Property.getAveragePriceBySector();
+
+      res.status(200).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new PropertyController();

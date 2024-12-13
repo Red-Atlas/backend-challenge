@@ -17,6 +17,14 @@ class PropertyService {
     }
   }
 
+  static async getAveragePriceBySector() {
+    try {
+      return await Property.getAveragePriceBySector();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async findAll(query) {
     try {
       return await Property.find(query);

@@ -4,7 +4,8 @@ import property from "../controllers/property.controller";
 
 const router = Router();
 
-router.get("/stats/sector", property.groupAndCountBySector);
+router.get("/stats/sectors", property.groupAndCountBySector);
+router.get("/stats/sectors/prices", property.getAveragePriceBySector);
 
 router.post("/", property.create);
 router.get("/", property.findAll);
