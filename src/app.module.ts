@@ -25,7 +25,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        console.log('DB_HOST:', configService.get('DB_HOST'));
+        console.log('DB_HOST:', configService.get('DB_HOST')); // Verificar que la variable DB_HOST esté correctamente cargada
         return {
           type: 'postgres',
           host: configService.get('DB_HOST'),
@@ -38,6 +38,9 @@ import { RolesGuard } from './auth/guards/roles.guard';
           migrationsRun: true,
           synchronize: true,
           logging: true,
+          // ssl: {
+          //   rejectUnauthorized: false, // Permitir la conexión SSL incluso si el certificado no es completamente validado
+          // },
         };
       },
       inject: [ConfigService],
