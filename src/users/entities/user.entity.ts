@@ -4,14 +4,18 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Role } from '../enums/role.enum';
+import { Transaction } from 'src/transactions/entities/transaction.entity';
+import { Listing } from 'src/listings/entities/listing.entity';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ nullable: false })
   username: string;
 
   @Column({ unique: true })
@@ -32,4 +36,12 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.user, {
+    onDelete: 'CASCADE',
+  })
+  transactions: Transaction[];
+
+  @OneToMany(() => Listing, (listing) => listing.user, { onDelete: 'CASCADE' })
+  listings: Listing[];
 }

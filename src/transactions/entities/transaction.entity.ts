@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Property } from 'src/properties/entities/property.entity';
+import { Listing } from 'src/listings/entities/listing.entity';
 import { TransactionType } from '../enums/transaction-type.enum';
 
 @Entity('transactions')
@@ -30,8 +31,11 @@ export class Transaction {
   @ManyToOne(() => Property, (property) => property.id)
   @JoinColumn({ name: 'property_id' })
   property: Property;
+  @ManyToOne(() => Listing, (listing) => listing.id)
+  @JoinColumn({ name: 'listing_id' })
+  listing: Listing;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.listings)
   @JoinColumn({ name: 'user_id' })
   user: User;
 

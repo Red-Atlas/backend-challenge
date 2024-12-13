@@ -31,11 +31,11 @@ export class Listing {
   })
   property_type: PropertyType;
 
-  @ManyToOne(() => Property, (property) => property.id)
+  @ManyToOne(() => Property, (property) => property.listings)
   @JoinColumn({ name: 'property_id' })
   property: Property;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.listings, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
