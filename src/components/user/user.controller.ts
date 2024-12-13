@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { userService } from './user.service.js';
+import { userService } from './user.service';
 
 export async function getUser(
   req: Request,
@@ -55,14 +55,28 @@ export async function updateUser(
   }
 }
 
-export async function toggleUserActive(
+export async function deleteUser(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<any> {
   const { id } = req.params
   try {
-    const user = await userService.toggleUserActive(id);
+    const user = await userService.deleteUser(id);
+    return res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function inactiveUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<any> {
+  const { id } = req.params
+  try {
+    const user = await userService.inactiveUser(id);
     return res.status(200).json({ success: true, data: user });
   } catch (error) {
     next(error);

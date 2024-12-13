@@ -1,12 +1,14 @@
 import { Router } from 'express';
-import { createUser, getUser, getUsers, toggleUserActive, updateUser } from './user.controller.js';
+import { createUser, deleteUser, getUser, getUsers, inactiveUser, updateUser } from './user.controller';
+import { authenticate } from '../../middlewares/authenticate';
 
 const userRouter = Router();
 
-userRouter.post('/users', createUser);
-userRouter.get('/users', getUsers);
-userRouter.get('/users/:id', getUser);
-userRouter.put('/users/:id', updateUser);
-userRouter.patch('/users/:id/active', toggleUserActive);
+userRouter.post('/users', authenticate, createUser);
+userRouter.get('/users', authenticate, getUsers);
+userRouter.get('/users/:id', authenticate, getUser);
+userRouter.put('/users/:id', authenticate, updateUser);
+userRouter.delete('/users/:id', authenticate, deleteUser);
+userRouter.patch('/users/:id/active', authenticate, inactiveUser);
 
 export default userRouter;

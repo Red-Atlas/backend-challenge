@@ -1,12 +1,12 @@
 import { DeepPartial } from "typeorm";
-import { validationInputCreateUser } from "./utils/validation.js";
-import { IUser } from "./user.dto.js";
-import { User } from "./user.entity.js";
+import { validationInputCreateUser } from "./utils/validation";
+import { IUser } from "./user.dto";
+import { User } from "./user.entity";
 
 async function findOne({
   filter,
-}: { filter: Partial<IUser> }): Promise<User> {
-  const user = await User.findOneBy(filter);
+}: { filter: Partial<Omit<IUser, 'property'>> }): Promise<User> {
+  const user = await User.findOneBy({ ...filter, active: true });
   if (!user) {
     throw new Error('User not found')
   }
@@ -14,7 +14,7 @@ async function findOne({
   return user
 }
 
-async function find(filter?: Partial<IUser>): Promise<Array<User>> {
+async function find(filter?: Partial<Omit<IUser, 'property'>>): Promise<Array<User>> {
   return User.find({where: filter})
 }
 
@@ -52,16 +52,22 @@ async function create(
   return user.save()
 }
 
+async function deleteUser(id: IUser['id']): Promise<string> {
+  const user = await findOne({ filter: { id }});
+  await user.remove()
+  return 'User Deleted successfully'
+};
+
 /**
  * 
  * @param id 
- * @description - this service replace the delete for soft delete user, can change active or inactive user
+ * @description - this service replace the delete for soft delete user
  * @returns 
  */
-async function toggleUserActive(id: IUser['id']): Promise<User> {
+async function inactiveUser(id: IUser['id']): Promise<User> {
   const user = await findOne({ filter: { id } });
 
-  user.active = !user.active
+  user.active = false
 
   return user.save()
 }
@@ -71,5 +77,6 @@ export const userService = Object.freeze({
   find,
   update,
   create,
-  toggleUserActive,
+  deleteUser,
+  inactiveUser,
 })

@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { verify } from 'argon2';
-import { IUser } from '../user/user.dto.js';
-import { JWTPayload } from './auth.dto.js';
-import { userService } from '../user/user.service.js';
-import { User } from '../user/user.entity.js';
+import { IUser } from '../user/user.dto';
+import { JWTPayload } from './auth.dto';
+import { userService } from '../user/user.service';
+import { User } from '../user/user.entity';
 
 function signJWT({
   user,
@@ -105,8 +105,28 @@ async function currentUser(token: string) {
   return user;
 }
 
+async function currentAdminUser(token: string) {
+  if (!token) {
+    return null;
+  };
+
+  // We get the userId from the token
+  const payload = verifyJWT({ token });
+
+  const user = await User.findOneBy({
+    id: payload?.id,
+    active: true,
+    role: 'ADMIN',
+  });
+
+  if (!user) throw new Error('Access denied: User does not have admin privileges')
+
+  return user;
+}
+
 export const authService = Object.freeze({
   signIn,
   signUp,
   currentUser,
+  currentAdminUser,
 })

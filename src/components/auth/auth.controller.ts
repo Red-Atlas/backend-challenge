@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { authService } from './auth.service.js';
+import { authService } from './auth.service';
 
 export async function signUp(
   req: Request,
