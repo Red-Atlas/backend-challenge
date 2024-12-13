@@ -10,10 +10,16 @@ class PropertyService {
     }
   }
 
+  static async getBySector() {
+    try {
+      return await Property.getPropertiesBySector();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async findAll(query) {
     try {
-      if (query.valuation) return await Property.getValuation(query);
-
       return await Property.find(query);
     } catch (error) {
       throw error;

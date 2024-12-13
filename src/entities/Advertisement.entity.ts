@@ -2,13 +2,11 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToMany,
   ManyToOne,
   Index,
 } from "typeorm";
 
 import { Property } from "./Property.entity";
-import { Transaction } from "./Transaction.entity";
 
 enum PropertyType {
   APARTMENT = "apartment",
@@ -37,13 +35,12 @@ class Advertisement {
   price: number;
 
   @Column({ type: "enum", enum: Status })
+  @Index()
   status: string;
 
   @Column({ type: "enum", enum: PropertyType })
+  @Index()
   propertyType: string;
-
-  @OneToMany(() => Transaction, (transaction) => transaction.advertisement)
-  transactions: Transaction[];
 
   @ManyToOne(() => Property, (property) => property.advertisements)
   property: Property;

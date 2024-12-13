@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 abstract class BaseController {
-  private service;
+  protected service;
 
   constructor(service) {
     this.service = service;

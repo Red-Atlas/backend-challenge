@@ -1,6 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  Index,
+} from "typeorm";
 
 import { Advertisement } from "./Advertisement.entity";
+import { Transaction } from "./Transaction.entity";
 
 enum Sector {
   RESIDENTIAL = "residential",
@@ -18,6 +25,7 @@ class Property {
   address: string;
 
   @Column()
+  @Index()
   area: number;
 
   @Column()
@@ -28,6 +36,9 @@ class Property {
 
   @OneToMany(() => Advertisement, (advertisement) => advertisement.property)
   advertisements: Advertisement[];
+
+  @OneToMany(() => Advertisement, (transaction) => transaction.property)
+  transactions: Transaction[];
 }
 
 export { Property };

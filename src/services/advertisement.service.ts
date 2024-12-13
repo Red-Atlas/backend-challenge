@@ -12,6 +12,7 @@ class AdvertisementService {
 
   static async findAll(query) {
     try {
+      return await Advertisement.find(query);
     } catch (error) {
       throw error;
     }
@@ -19,6 +20,11 @@ class AdvertisementService {
 
   static async findById(id) {
     try {
+      return await Advertisement.findOne({
+        where: {
+          id,
+        },
+      });
     } catch (error) {
       throw error;
     }
@@ -26,6 +32,7 @@ class AdvertisementService {
 
   static async updateById(id, data) {
     try {
+      return await Advertisement.update({ id }, data);
     } catch (error) {
       throw error;
     }
@@ -33,6 +40,7 @@ class AdvertisementService {
 
   static async deleteById(id) {
     try {
+      await Advertisement.delete({ id });
     } catch (error) {
       throw error;
     }

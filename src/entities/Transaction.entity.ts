@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 
-import { Advertisement } from "./Advertisement.entity";
+import { Property } from "./Property.entity";
 
 enum Type {
   SALE_PURCHASE = "sale_purchase",
@@ -29,8 +29,8 @@ class Transaction {
   @Column({ type: "enum", enum: Type })
   type: string;
 
-  @ManyToOne(() => Advertisement, (advertisement) => advertisement.transactions)
-  advertisement: Transaction;
+  @ManyToOne(() => Property, (property) => property.transactions)
+  property: Property;
 }
 
 export { Transaction };
