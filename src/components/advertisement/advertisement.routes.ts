@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate } from '../../middlewares/authenticate';
+import { authenticate } from '../../middlewares/authenticate.js';
 import {
   createAdvertisement,
   deleteAdvertisement,
@@ -7,7 +7,7 @@ import {
   getAdvertisements,
   inactiveAdvertisement,
   updateAdvertisement
-} from './advertisement.controller';
+} from './advertisement.controller.js';
 
 const transactionRouter = Router();
 

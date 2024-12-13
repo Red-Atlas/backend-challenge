@@ -1,6 +1,6 @@
 import { DeepPartial } from "typeorm";
-import { ITransaction, TCreateTransaction } from "./transaction.dto";
-import { Transaction } from "./transaction.entity";
+import { ITransaction, TCreateTransaction } from "./transaction.dto.js";
+import { Transaction } from "./transaction.entity.js";
 
 async function findOne({
   filter,

@@ -1,7 +1,7 @@
 import { DeepPartial } from "typeorm";
-import { validationInputCreateUser } from "./utils/validation";
-import { IUser } from "./user.dto";
-import { User } from "./user.entity";
+import { validationInputCreateUser } from "./utils/validation.js";
+import { IUser } from "./user.dto.js";
+import { User } from "./user.entity.js";
 
 async function findOne({
   filter,

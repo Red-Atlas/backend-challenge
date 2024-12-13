@@ -1,4 +1,4 @@
-import { IUser } from "../user.dto";
+import { IUser } from "../user.dto.js";
 
 export function validationInputCreateUser({
   firstName, lastName, email, password

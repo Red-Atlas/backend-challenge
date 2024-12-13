@@ -1,12 +1,12 @@
 import { DataSource } from 'typeorm';
-// import { fileURLToPath } from 'url';
-import {  join } from 'path';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: 'src/.env'})
 
 // Define __dirname manualmente
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 console.log("__filename", __filename)
 console.log("__dirname", __dirname)
 console.log("hosttt",process.env.DB_HOST)
@@ -23,10 +23,11 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: false,
   logging: process.env.NODE_ENV !== "production",
+  // migrationsRun: true,
   entities: [
     process.env.NODE_ENV === "production"
       ? "dist/components/**/**.entity.js"
-      :join("/components/**/**.entity.{ts,js}"),
+      : join(__dirname + "/components/**/**.entity.{ts,js}"),
   ],
   migrations: [
     process.env.NODE_ENV === "production"

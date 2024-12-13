@@ -10,10 +10,10 @@ import {
   OneToMany,
   Relation,
 } from 'typeorm';
-import { IUser, TUserRole, UserRole } from './user.dto';
+import { IUser, TUserRole, UserRole } from './user.dto.js';
 import { hash } from 'argon2';
-import { Transaction } from '../transaction/transaction.entity';
-import { Property } from '../property/property.entity';
+import { Transaction } from '../transaction/transaction.entity.js';
+import { Property } from '../property/property.entity.js';
 
 @Entity()
 export class User extends BaseEntity implements IUser {
@@ -32,7 +32,7 @@ export class User extends BaseEntity implements IUser {
   @Column({ type: 'varchar' })
   password: string;
 
-  @Column({ type: 'enum', enum: Object.keys(UserRole), default: 'user'})
+  @Column({ type: 'enum', enum: Object.keys(UserRole), default: 'USER'})
   role: TUserRole;
 
   @Column({ type: 'varchar', nullable: true })

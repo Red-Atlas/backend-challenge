@@ -1,4 +1,4 @@
-import { IUser } from "../user/user.dto";
+import { IUser } from "../user/user.dto.js";
 
 export interface JWTPayload {
   id: IUser['id'];

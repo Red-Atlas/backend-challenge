@@ -18,8 +18,8 @@ import {
   TTransactionStatusType,
   TTransactionType
 } from './transaction.dto';
-import { User } from '../user/user.entity';
-import { Advertisement } from '../advertisement/advertisement.entity';
+import { User } from '../user/user.entity.js';
+import { Advertisement } from '../advertisement/advertisement.entity.js';
 
 @Entity()
 export class Transaction extends BaseEntity implements ITransaction {
@@ -52,7 +52,7 @@ export class Transaction extends BaseEntity implements ITransaction {
   @Column({ type: 'decimal' })
   taxAmount: number;
 
-  @Column({ type: 'enum', enum: Object.keys(TransactionStatusEnum), default: 'in_verification' })
+  @Column({ type: 'enum', enum: Object.keys(TransactionStatusEnum), default: 'IN_VERIFICATION' })
   status: TTransactionStatusType;
 
   @Column({ type: 'boolean', default: true })

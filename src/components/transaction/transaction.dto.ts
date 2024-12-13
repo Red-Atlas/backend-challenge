@@ -1,6 +1,6 @@
-import { Advertisement } from "../advertisement/advertisement.entity";
-import { IBaseEntityType } from "../user/user.dto";
-import { User } from "../user/user.entity";
+import { Advertisement } from "../advertisement/advertisement.entity.js";
+import { IBaseEntityType } from "../user/user.dto.js";
+import { User } from "../user/user.entity.js";
 
 export enum TransactionTypeEnum {
   SALE_PURCHASE = 'sale_purchase',

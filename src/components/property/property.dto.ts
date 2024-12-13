@@ -1,6 +1,6 @@
-import { User } from "../user/user.entity";
-import { IBaseEntityType } from "../user/user.dto";
-import { Advertisement } from "../advertisement/advertisement.entity";
+import { User } from "../user/user.entity.js";
+import { IBaseEntityType } from "../user/user.dto.js";
+import { Advertisement } from "../advertisement/advertisement.entity.js";
 
 export enum PropertySectorEnum {
   RESIDENTIAL = 'residential',

@@ -10,9 +10,9 @@ import {
   OneToMany,
   Relation,
 } from 'typeorm';
-import { User } from '../user/user.entity';
-import { Advertisement } from '../advertisement/advertisement.entity';
-import { IProperty, PropertySectorEnum, TPropertySectorEnum } from './property.dto';
+import { User } from '../user/user.entity.js';
+import { Advertisement } from '../advertisement/advertisement.entity.js';
+import { IProperty, PropertySectorEnum, TPropertySectorEnum } from './property.dto.js';
 
 @Entity()
 export class Property extends BaseEntity implements IProperty {

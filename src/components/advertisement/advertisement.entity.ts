@@ -16,9 +16,9 @@ import {
   IAdvertisement,
   TAdvertisementPropertyTypeEnum,
   TAdvertisementStatusEnum
-} from './advertisement.dto';
-import { Transaction } from '../transaction/transaction.entity';
-import { Property } from '../property/property.entity';
+} from './advertisement.dto.js';
+import { Transaction } from '../transaction/transaction.entity.js';
+import { Property } from '../property/property.entity.js';
 
 @Entity()
 export class Advertisement extends BaseEntity implements IAdvertisement {

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate } from '../../middlewares/authenticate';
+import { authenticate } from '../../middlewares/authenticate.js';
 import {
   createProperty,
   deleteProperty,
@@ -7,7 +7,7 @@ import {
   getProperty,
   inactiveProperty,
   updateProperty
-} from './property.controller';
+} from './property.controller.js';
 
 const propertyRouter = Router();
 

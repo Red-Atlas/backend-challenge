@@ -1,6 +1,6 @@
 import { DeepPartial } from "typeorm";
-import { IProperty, TCreateProperty } from "./property.dto";
-import { Property } from "./property.entity";
+import { IProperty, TCreateProperty } from "./property.dto.js";
+import { Property } from "./property.entity.js";
 
 async function findOne({
   filter,

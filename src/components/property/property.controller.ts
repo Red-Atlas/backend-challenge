@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { propertyService } from './property.service';
+import { propertyService } from './property.service.js';
 
 export async function getProperty(
   req: Request,
