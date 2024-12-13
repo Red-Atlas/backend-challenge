@@ -3,8 +3,7 @@ import Property from "../repositories/property.rep";
 class PropertyService {
   static async create(data) {
     try {
-      const propertyEntity = Property.create(data);
-      await Property.save(propertyEntity);
+      await Property.save(data.properties);
     } catch (error) {
       throw error;
     }
