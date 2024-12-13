@@ -21,6 +21,6 @@ router.use(
   property
 );
 router.use("/transactions", queryBuilder, transactions);
-router.use("/advertisement", queryBuilder, advertisements);
+router.use("/advertisements", queryBuilder, advertisements);
 
 export default router;

@@ -50,6 +50,19 @@ const AdvertisementRepository = AppDataSource.getRepository(
       .addSelect("property.* , advertisement.*")
       .getRawMany();
   },
+
+  async getPropertiesByType() {
+    const queryBuilder = this.createQueryBuilder(
+      "advertisement"
+    ) as SelectQueryBuilder<Advertisement>;
+
+    return await queryBuilder
+      .select("advertisement.propertyType", "propertyType")
+      .addSelect("COUNT(advertisement.id)", "count")
+      .groupBy("advertisement.propertyType")
+      .orderBy("count", "DESC")
+      .getRawMany();
+  },
 });
 
 export default AdvertisementRepository;

@@ -4,6 +4,8 @@ import advertisement from "../controllers/advertisement.controller";
 
 const router = Router();
 
+router.get("/stats/type", advertisement.getPropertiesByType);
+
 router.post("/", advertisement.create);
 router.get("/", advertisement.findAll);
 router.get("/:id", advertisement.findById);

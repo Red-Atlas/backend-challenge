@@ -3,8 +3,7 @@ import Advertisement from "../repositories/advertisement.rep";
 class AdvertisementService {
   static async create(data) {
     try {
-      const advertisementEntity = Advertisement.create(data);
-      await Advertisement.save(advertisementEntity);
+      await Advertisement.save(data.advertisements);
     } catch (error) {
       throw error;
     }
@@ -13,6 +12,14 @@ class AdvertisementService {
   static async findAll(query) {
     try {
       return await Advertisement.find(query);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getPropertiesByType() {
+    try {
+      return await Advertisement.getPropertiesByType();
     } catch (error) {
       throw error;
     }
