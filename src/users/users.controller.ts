@@ -45,7 +45,7 @@ export class UsersController {
   }
 
   // Obtener anuncios de un usuario
-  @Get(':id/listings')
+  @Get('listings/:id')
   async getUserListings(@Param('id') id: string) {
     const listings = await this.usersService.getUserListings(+id);
     if (!listings || listings.length === 0) {
@@ -55,7 +55,7 @@ export class UsersController {
   }
 
   // Obtener propiedades de un usuario
-  @Get(':id/properties')
+  @Get('properties/:id')
   async getUserProperties(@Param('id') id: string) {
     const properties = await this.usersService.getUserProperties(+id);
     if (!properties || properties.length === 0) {
@@ -65,7 +65,7 @@ export class UsersController {
   }
 
   // Obtener transacciones de un usuario
-  @Get(':id/transactions')
+  @Get('/transactions/:id')
   async getUserTransactions(@Param('id') id: string) {
     const transactions = await this.usersService.getUserTransactions(+id);
     if (!transactions || transactions.length === 0) {
