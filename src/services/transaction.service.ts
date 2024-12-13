@@ -3,8 +3,7 @@ import Transaction from "../repositories/transaction.rep";
 class TransactionService {
   static async create(data) {
     try {
-      const advertisementEntity = Transaction.create(data);
-      await Transaction.save(advertisementEntity);
+      await Transaction.save(data.transactions);
     } catch (error) {
       throw error;
     }
@@ -13,6 +12,14 @@ class TransactionService {
   static async findAll(query) {
     try {
       return await Transaction.find(query);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getMovementsByPeriod() {
+    try {
+      return await Transaction.getMovementsByPeriod();
     } catch (error) {
       throw error;
     }
