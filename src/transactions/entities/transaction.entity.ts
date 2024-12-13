@@ -28,14 +28,15 @@ export class Transaction {
   @CreateDateColumn()
   date: Date;
 
-  @ManyToOne(() => Property, (property) => property.id)
+  @ManyToOne(() => Property, (property) => property.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'property_id' })
   property: Property;
-  @ManyToOne(() => Listing, (listing) => listing.id)
+
+  @ManyToOne(() => Listing, (listing) => listing.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'listing_id' })
   listing: Listing;
 
-  @ManyToOne(() => User, (user) => user.listings)
+  @ManyToOne(() => User, (user) => user.listings, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 

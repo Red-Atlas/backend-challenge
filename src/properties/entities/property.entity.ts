@@ -28,9 +28,13 @@ export class Property {
   @CreateDateColumn()
   created_at: Date;
 
-  @OneToMany(() => Listing, (listing) => listing.property)
+  @OneToMany(() => Listing, (listing) => listing.property, {
+    onDelete: 'CASCADE',
+  })
   listings: Listing[];
 
-  @OneToMany(() => Transaction, (transaction) => transaction.property)
+  @OneToMany(() => Transaction, (transaction) => transaction.property, {
+    onDelete: 'CASCADE',
+  })
   transactions: Transaction[];
 }

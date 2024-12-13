@@ -31,7 +31,9 @@ export class Listing {
   })
   property_type: PropertyType;
 
-  @ManyToOne(() => Property, (property) => property.listings)
+  @ManyToOne(() => Property, (property) => property.listings, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'property_id' })
   property: Property;
 
