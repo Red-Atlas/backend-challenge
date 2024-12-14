@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { TransactionType } from './enums/transaction-type.enum';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -68,5 +70,31 @@ export class TransactionsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.transactionsService.remove(+id);
+  }
+  // Generar Tendencias
+  @Get('/order/trends')
+  async getTrends(
+    @Query('type') type: TransactionType,
+    @Query('groupBy') groupBy: 'month' | 'year',
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query() filters: any,
+  ) {
+    // Validación de filtros
+    if (!Object.values(TransactionType).includes(type)) {
+      throw new BadRequestException('Invalid transaction type');
+    }
+
+    if (groupBy !== 'month' && groupBy !== 'year') {
+      throw new BadRequestException('Invalid groupBy value');
+    }
+
+    return this.transactionsService.getTrends(
+      type,
+      groupBy,
+      page,
+      limit,
+      filters,
+    );
   }
 }

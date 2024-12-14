@@ -7,9 +7,10 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { Transaction } from './entities/transaction.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Property } from 'src/properties/entities/property.entity';
+import { TransactionType } from './enums/transaction-type.enum';
 
 @Injectable()
 export class TransactionsService {
@@ -203,5 +204,130 @@ export class TransactionsService {
 
     await this.transactionRepository.remove(transaction);
     return { message: `Transaction with ID ${id} has been removed` };
+  }
+  // Tendencias para la Transactions
+  async getTrends(
+    type: TransactionType,
+    groupBy: 'month' | 'year',
+    page: number = 1,
+    limit: number = 10,
+    filters: any = {},
+  ) {
+    const skip = (page - 1) * limit;
+    const dateFormat = groupBy === 'month' ? 'YYYY-MM' : 'YYYY';
+
+    // Función para validar fecha
+    function isValidDate(date: string): boolean {
+      return !isNaN(Date.parse(date));
+    }
+
+    // Validación de fechas
+    if (filters.startDate && !isValidDate(filters.startDate)) {
+      throw new BadRequestException(
+        `Fecha de inicio no válida: ${filters.startDate}`,
+      );
+    }
+
+    if (filters.endDate && !isValidDate(filters.endDate)) {
+      throw new BadRequestException(
+        `Fecha de fin no válida: ${filters.endDate}`,
+      );
+    }
+
+    try {
+      const queryBuilder = this.transactionRepository
+        .createQueryBuilder('transaction')
+        .select(`TO_CHAR(transaction.created_at, '${dateFormat}')`, 'period')
+        .addSelect('COUNT(transaction.id)', 'transaction_count')
+        .addSelect('AVG(transaction.price)', 'average_price')
+        .addSelect('MAX(transaction.price)', 'max_price')
+        .addSelect('MIN(transaction.price)', 'min_price')
+        .leftJoin('transaction.property', 'property')
+        .leftJoin('transaction.user', 'user')
+        .skip(skip)
+        .take(limit)
+        .where('transaction.type = :type', { type })
+        .andWhere('transaction.created_at BETWEEN :startDate AND :endDate', {
+          startDate: filters.startDate || '1900-01-01',
+          endDate: filters.endDate || '9999-12-31',
+        })
+        .groupBy('period')
+        .orderBy('period', 'ASC');
+
+      // Filtros adicionales
+      if (filters.propertyId) {
+        queryBuilder.andWhere('transaction.property_id = :propertyId', {
+          propertyId: filters.propertyId,
+        });
+      }
+
+      if (filters.userId) {
+        queryBuilder.andWhere('transaction.user_id = :userId', {
+          userId: filters.userId,
+        });
+      }
+
+      if (filters.minPrice && filters.maxPrice) {
+        queryBuilder.andWhere(
+          'transaction.price BETWEEN :minPrice AND :maxPrice',
+          {
+            minPrice: filters.minPrice,
+            maxPrice: filters.maxPrice,
+          },
+        );
+      }
+
+      const trends = await queryBuilder.getRawMany();
+      const total = trends.length;
+
+      if (!Array.isArray(trends)) {
+        throw new Error(
+          'Expected trends to be an array, but got something else',
+        );
+      }
+
+      // Construir los datos para la respuesta
+      const trendsObj = trends.reduce((acc, trend) => {
+        acc[trend.period] = {
+          transactionCount: parseInt(trend.transaction_count, 10),
+          averagePrice: parseFloat(trend.average_price),
+          maxPrice: parseFloat(trend.max_price),
+          minPrice: parseFloat(trend.min_price),
+        };
+        return acc;
+      }, {});
+
+      // Extraer los datos para gráficos
+      const periods = Object.keys(trendsObj);
+      const transactionCounts = periods.map(
+        (period) => trendsObj[period].transactionCount,
+      );
+      const averagePrices = periods.map(
+        (period) => trendsObj[period].averagePrice,
+      );
+      const maxPrices = periods.map((period) => trendsObj[period].maxPrice);
+      const minPrices = periods.map((period) => trendsObj[period].minPrice);
+
+      return {
+        data: {
+          periods,
+          transactionCounts,
+          averagePrices,
+          maxPrices,
+          minPrices,
+        },
+        total,
+        page,
+        totalPages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      if (
+        error instanceof QueryFailedError &&
+        error.message.includes('date/time field value out of range')
+      ) {
+        throw new BadRequestException('Date out of range');
+      }
+      throw error;
+    }
   }
 }
