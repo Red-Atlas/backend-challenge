@@ -97,11 +97,15 @@ export class ListingsController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 1,
     @Query('propertiesPerRange') propertiesPerRange: number = 10,
+    @Query('status') status?: string,
+    @Query('property_type') property_type?: string,
   ) {
     return this.listingsService.getListingsWithHistogramData(
       page,
       limit,
       propertiesPerRange,
+      status,
+      property_type,
     );
   }
 }

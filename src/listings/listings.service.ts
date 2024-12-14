@@ -235,21 +235,33 @@ export class ListingsService {
 
     return await this.listingRepository.remove(listing);
   }
-
   //Histogramas
   async getListingsWithHistogramData(
     page: number,
     limit: number,
     propertiesPerRange: number,
+    status?: string,
+    property_type?: string,
   ): Promise<any> {
-    const allListings = await this.listingRepository
+    const queryBuilder = this.listingRepository
       .createQueryBuilder('Listing')
       .select('Listing.id', 'Listing_id')
       .addSelect('Listing.price', 'Listing_price')
       .addSelect('Listing.status', 'Listing_status')
       .addSelect('Listing.property_type', 'Listing_property_type')
-      .addSelect('Listing.created_at', 'Listing_created_at')
-      .getRawMany();
+      .addSelect('Listing.created_at', 'Listing_created_at');
+
+    if (status) {
+      queryBuilder.andWhere('Listing.status = :status', { status });
+    }
+
+    if (property_type) {
+      queryBuilder.andWhere('Listing.property_type = :property_type', {
+        property_type,
+      });
+    }
+
+    const allListings = await queryBuilder.getRawMany();
 
     const sortedListings = allListings.sort(
       (a, b) => parseFloat(a.Listing_price) - parseFloat(b.Listing_price),
@@ -282,7 +294,6 @@ export class ListingsService {
     }
 
     const totalPages = Math.ceil(histogramData.length / limit);
-
     const pageData = histogramData.slice((page - 1) * limit, page * limit);
 
     return {
