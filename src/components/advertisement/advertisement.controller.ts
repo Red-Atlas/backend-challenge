@@ -82,3 +82,14 @@ export async function inactiveAdvertisement(
     next(error);
   }
 }
+
+export async function getAdvertisementsPriceRange(
+  req: Request, res: Response, next: NextFunction
+): Promise<any> {
+    try {
+      const advertisementsPriceRange = await advertisementService.getAdvertisementsPriceRange()
+      return res.status(200).json({ success: true, data: advertisementsPriceRange })
+    } catch (error) {
+      next(error);
+    }
+};

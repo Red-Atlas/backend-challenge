@@ -5,6 +5,7 @@ import userRouter from './components/user/user.routes.js';
 import authRouter from './components/auth/auth.routes.js';
 import transactionRouter from './components/transaction/transaction.routes.js';
 import propertyRouter from './components/property/property.routes.js';
+import advertisementsRouter from 'components/advertisement/advertisement.routes.js';
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(userRouter)
 app.use(authRouter)
 app.use(transactionRouter)
 app.use(propertyRouter)
+app.use(advertisementsRouter)
 
 // error handlers
 app.use(notFoundHandler);

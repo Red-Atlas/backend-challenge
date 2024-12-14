@@ -1,6 +1,7 @@
 import { DeepPartial } from "typeorm";
 import { ITransaction, TCreateTransaction } from "./transaction.dto.js";
 import { Transaction } from "./transaction.entity.js";
+import { AppDataSource } from "db.js";
 
 async function findOne({
   filter,
@@ -35,7 +36,7 @@ async function update({
 async function create(
   data: TCreateTransaction
 ): Promise<Transaction> {
-  return Transaction.create(data as DeepPartial<Transaction>);
+  return Transaction.create(data as DeepPartial<Transaction>).save();
 }
 
 async function deleteTransaction(id: ITransaction['id']): Promise<string> {
@@ -52,6 +53,28 @@ async function inactiveTransaction(id: ITransaction['id']): Promise<Transaction>
   return transaction.save()
 }
 
+async function getTransactionByPeriods(){
+  const transactionRepository = AppDataSource.getRepository(Transaction);
+  
+  return transactionRepository
+    .createQueryBuilder('transaction')
+    .select([
+      'EXTRACT(YEAR FROM transaction.createdAt) AS year',
+      'EXTRACT(MONTH FROM transaction.createdAt) AS month',
+      'transaction.type AS transactionType',
+      'COUNT(transaction.id) AS totalTransactions'
+    ])
+    .where('transaction.createdAt IS NOT NULL')
+    .andWhere('transaction.active = :active', { active: true })
+    .groupBy('EXTRACT(YEAR FROM transaction.createdAt)')
+    .addGroupBy('EXTRACT(MONTH FROM transaction.createdAt)')
+    .addGroupBy('transaction.type')
+    .orderBy('year', 'DESC')
+    .addOrderBy('month', 'DESC')
+    .addOrderBy('transactionType', 'ASC')
+    .getRawMany();
+}
+
 export const transactionService = Object.freeze({
   findOne,
   find,
@@ -59,4 +82,5 @@ export const transactionService = Object.freeze({
   create,
   deleteTransaction,
   inactiveTransaction,
+  getTransactionByPeriods,
 })

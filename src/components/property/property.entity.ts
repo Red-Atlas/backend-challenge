@@ -9,10 +9,12 @@ import {
   JoinColumn,
   OneToMany,
   Relation,
+  Index,
 } from 'typeorm';
 import { User } from '../user/user.entity.js';
 import { Advertisement } from '../advertisement/advertisement.entity.js';
 import { IProperty, PropertySectorEnum, TPropertySectorEnum } from './property.dto.js';
+import { Transaction } from '../transaction/transaction.entity.js';
 
 @Entity()
 export class Property extends BaseEntity implements IProperty {
@@ -23,6 +25,7 @@ export class Property extends BaseEntity implements IProperty {
   address: string;
 
   @Column({ type: 'enum', enum: Object.keys(PropertySectorEnum), nullable: false })
+  @Index()
   sector: TPropertySectorEnum;
 
   @ManyToOne(() => User, (user) => user.property, { eager: false })
@@ -36,16 +39,20 @@ export class Property extends BaseEntity implements IProperty {
   description: string;
 
   @Column({ type: 'decimal' })
-  size: number;
+  @Index()
+  area: number;
 
   @Column({ type: 'integer' })
   yearBuilt: number;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   amenities: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   images: string[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.property)
+  transactions: Relation<Transaction[]>;
 
   @Column({ type: 'boolean', default: true })
   active: boolean;

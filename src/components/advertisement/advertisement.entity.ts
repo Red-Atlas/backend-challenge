@@ -9,6 +9,7 @@ import {
   JoinColumn,
   OneToMany,
   Relation,
+  Index,
 } from 'typeorm';
 import {
   AdvertisementPropertyTypeEnum,
@@ -26,6 +27,7 @@ export class Advertisement extends BaseEntity implements IAdvertisement {
   id: string;
  
   @Column({ type: 'decimal' })
+  @Index()
   price: number;
 
   @ManyToOne(() => Property, (property) => property.advertisement)
@@ -39,6 +41,7 @@ export class Advertisement extends BaseEntity implements IAdvertisement {
   propertyType: TAdvertisementPropertyTypeEnum;
 
   @Column({ type: 'enum', enum: Object.keys(AdvertisementStatusEnum), nullable: false })
+  @Index()
   status: TAdvertisementStatusEnum;
 
   @Column({ type: 'varchar' })

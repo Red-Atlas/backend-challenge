@@ -5,17 +5,19 @@ import {
   deleteAdvertisement,
   getAdvertisement,
   getAdvertisements,
+  getAdvertisementsPriceRange,
   inactiveAdvertisement,
   updateAdvertisement
 } from './advertisement.controller.js';
 
-const transactionRouter = Router();
+const advertisementsRouter = Router();
 
-transactionRouter.post('/advertisements', authenticate, createAdvertisement);
-transactionRouter.get('/advertisements', authenticate, getAdvertisements);
-transactionRouter.get('/advertisements/:id', authenticate, getAdvertisement);
-transactionRouter.put('/advertisements/:id', authenticate, updateAdvertisement);
-transactionRouter.delete('/advertisements/:id', authenticate, deleteAdvertisement);
-transactionRouter.patch('/advertisements/:id', authenticate, inactiveAdvertisement);
+advertisementsRouter.post('/advertisements', authenticate, createAdvertisement);
+advertisementsRouter.get('/advertisements', authenticate, getAdvertisements);
+advertisementsRouter.get('/advertisements/price-range', authenticate, getAdvertisementsPriceRange);
+advertisementsRouter.get('/advertisements/:id', authenticate, getAdvertisement);
+advertisementsRouter.put('/advertisements/:id', authenticate, updateAdvertisement);
+advertisementsRouter.delete('/advertisements/:id', authenticate, deleteAdvertisement);
+advertisementsRouter.patch('/advertisements/:id', authenticate, inactiveAdvertisement);
 
-export default transactionRouter;
+export default advertisementsRouter;

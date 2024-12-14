@@ -1,6 +1,8 @@
 import { User } from "../user/user.entity.js";
 import { IBaseEntityType } from "../user/user.dto.js";
 import { Advertisement } from "../advertisement/advertisement.entity.js";
+import { Transaction } from "../transaction/transaction.entity.js";
+import { TPagination } from "./utils/filtersPagination.js";
 
 export enum PropertySectorEnum {
   RESIDENTIAL = 'residential',
@@ -16,12 +18,24 @@ export interface IProperty extends IBaseEntityType {
   owner: User;
   sector: TPropertySectorEnum;
   description: string;
-  size: number;
+  area: number;
   yearBuilt: number;
+  transactions?: Transaction[];
   advertisement?: Advertisement[]
   amenities?: string;
   images?: string[];
 };
 
 export type TCreateProperty =
-  Pick<IProperty, 'address' | 'owner' | 'sector' | 'description' | 'size' | 'yearBuilt'>
+  Pick<IProperty, 'address' | 'owner' | 'sector' | 'description' | 'area' | 'yearBuilt'>
+
+export type TPaginationProperty =
+  Pick<IProperty, 'address' | 'owner' | 'sector' | 'active'> & TPagination & {
+    sector: string;
+    minArea: number;
+    maxArea: number;
+    minYearBuilt: number;
+    maxYearBuilt: number;
+  };
+
+

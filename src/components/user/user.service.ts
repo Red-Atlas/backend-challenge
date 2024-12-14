@@ -47,9 +47,7 @@ async function create(
     throw new Error('Email in use')
   }
 
-  const user = User.create(data as DeepPartial<User>);
-  
-  return user.save()
+  return User.create(data as DeepPartial<User>).save();
 }
 
 async function deleteUser(id: IUser['id']): Promise<string> {

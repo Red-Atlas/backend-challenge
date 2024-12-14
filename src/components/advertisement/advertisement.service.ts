@@ -1,6 +1,7 @@
 import { DeepPartial } from "typeorm";
 import { Advertisement } from "./advertisement.entity.js";
 import { IAdvertisement, TCreateAdvertisement } from "./advertisement.dto.js";
+import { AppDataSource } from "db.js";
 
 async function findOne({
   filter,
@@ -35,7 +36,7 @@ async function update({
 async function create(
   data: TCreateAdvertisement
 ): Promise<Advertisement> {
-  return Advertisement.create(data as DeepPartial<Advertisement>);
+  return Advertisement.create(data as DeepPartial<Advertisement>).save();
 }
 
 async function deleteAdvertisement(id: IAdvertisement['id']): Promise<string> {
@@ -52,6 +53,35 @@ async function inactiveAdvertisement(id: IAdvertisement['id']): Promise<Advertis
   return advertisement.save()
 }
 
+async function getAdvertisementsPriceRange(){
+  const advertisementRepository = AppDataSource.getRepository(Advertisement);
+  
+  return advertisementRepository
+    .createQueryBuilder('advertisement')
+    .select([
+      'CASE WHEN advertisement.price BETWEEN 0 AND 50000 THEN \'0-50k\' ' +
+      'WHEN advertisement.price BETWEEN 50001 AND 100000 THEN \'50k-100k\' ' +
+      'WHEN advertisement.price BETWEEN 100001 AND 150000 THEN \'100k-150k\' ' +
+      'WHEN advertisement.price BETWEEN 150001 AND 200000 THEN \'150k-200k\' ' +
+      'WHEN advertisement.price BETWEEN 200001 AND 250000 THEN \'200k-250k\' ' +
+      'ELSE \'>250k\' END AS priceRange',
+      
+      'CASE WHEN advertisement.price BETWEEN 0 AND 50000 THEN 1 ' +
+      'WHEN advertisement.price BETWEEN 50001 AND 100000 THEN 2 ' +
+      'WHEN advertisement.price BETWEEN 100001 AND 150000 THEN 3 ' +
+      'WHEN advertisement.price BETWEEN 150001 AND 200000 THEN 4 ' +
+      'WHEN advertisement.price BETWEEN 200001 AND 250000 THEN 5 ' +
+      'ELSE 6 END AS priceRangeOrder',
+
+      'COUNT(advertisement.id) AS totalAdvertisements'
+    ])
+    .where('advertisement.active = :active', { active: true })
+    .groupBy('priceRange')
+    .addGroupBy('priceRangeOrder')
+    .orderBy('priceRangeOrder')
+    .getRawMany();
+}
+
 export const advertisementService = Object.freeze({
   findOne,
   find,
@@ -59,4 +89,5 @@ export const advertisementService = Object.freeze({
   create,
   deleteAdvertisement,
   inactiveAdvertisement,
+  getAdvertisementsPriceRange,
 })

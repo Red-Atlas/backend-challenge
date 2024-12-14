@@ -82,3 +82,14 @@ export async function inactiveTransaction(
     next(error);
   }
 }
+
+export async function getTransactionByPeriods(
+  req: Request, res: Response, next: NextFunction
+): Promise<any> {
+    try {
+      const transactionsByPeriods = await transactionService.getTransactionByPeriods()
+      return res.status(200).json({ success: true, data: transactionsByPeriods })
+    } catch (error) {
+      next(error);
+    }
+};

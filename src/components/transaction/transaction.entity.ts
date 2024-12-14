@@ -8,6 +8,7 @@ import {
   ManyToOne,
   JoinColumn,
   Relation,
+  Index,
 } from 'typeorm';
 import {
   ITransaction,
@@ -17,9 +18,10 @@ import {
   TransactionTypeEnum,
   TTransactionStatusType,
   TTransactionType
-} from './transaction.dto';
+} from './transaction.dto.js';
 import { User } from '../user/user.entity.js';
 import { Advertisement } from '../advertisement/advertisement.entity.js';
+import { Property } from '../property/property.entity.js';
 
 @Entity()
 export class Transaction extends BaseEntity implements ITransaction {
@@ -33,13 +35,14 @@ export class Transaction extends BaseEntity implements ITransaction {
   type: TTransactionType;
 
   @Column({ type: 'decimal', nullable: false })
+  @Index()
   price: number;
 
-  @ManyToOne(() => User, (user) => user.transactions, { nullable: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => User, (user) => user.transactions)
   @JoinColumn({ name: 'user_id' })
   user: Relation<User>;
 
-  @ManyToOne(() => Advertisement, (advertisement) => advertisement.transactions, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Advertisement, (advertisement) => advertisement.transactions)
   @JoinColumn({ name: 'advertisement_id' })
   advertisement: Relation<Advertisement>;
 
@@ -54,6 +57,10 @@ export class Transaction extends BaseEntity implements ITransaction {
 
   @Column({ type: 'enum', enum: Object.keys(TransactionStatusEnum), default: 'IN_VERIFICATION' })
   status: TTransactionStatusType;
+
+  @ManyToOne(() => Property, (property) => property.transactions)
+  @JoinColumn({ name: 'property_id' })
+  property: Relation<Property>;
 
   @Column({ type: 'boolean', default: true })
   active: boolean;

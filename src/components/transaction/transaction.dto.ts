@@ -1,3 +1,4 @@
+import { Property } from "components/property/property.entity.js";
 import { Advertisement } from "../advertisement/advertisement.entity.js";
 import { IBaseEntityType } from "../user/user.dto.js";
 import { User } from "../user/user.entity.js";
@@ -34,6 +35,7 @@ export interface ITransaction extends IBaseEntityType {
   advertisement: Advertisement;
   type: TTransactionType;
   paymentMethod: TPaymentMethodType;
+  property: Property;
   status?: TTransactionStatusType
   notes?: string;
   taxAmount?: number;
