@@ -23,6 +23,9 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: false,
   logging: process.env.NODE_ENV !== "production",
+  ssl: {
+    rejectUnauthorized: process.env.NODE_ENV == "production",
+  },
   // migrationsRun: true,
   entities: [
     process.env.NODE_ENV === "production"
