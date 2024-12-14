@@ -3,9 +3,11 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
 import User from "../services/user.service";
+import UserDTO from "../dto/user.dto";
 
 import { createSaltAndHash } from "../utils/hash.util";
-import { createToken } from "../utils/jtw.util";
+import createToken from "../utils/jtw.util";
+import validateInput from "../utils/classValidator.util";
 
 passport.use(
   "register",
@@ -13,7 +15,9 @@ passport.use(
     { usernameField: "email" },
     async (email, password, done) => {
       try {
-        const searchedUser = await User.findOne({ email });
+        const result = await validateInput({ email, password }, UserDTO);
+
+        const searchedUser = await User.findOne({ email: result.email });
 
         if (searchedUser)
           return done(null, false, {
@@ -21,7 +25,7 @@ passport.use(
             statusCode: 400,
           } as any);
 
-        const user = User.create({ email, password });
+        const user = User.create(result);
 
         done(null, user);
       } catch (error) {
@@ -37,8 +41,13 @@ passport.use(
     { passReqToCallback: true, usernameField: "email" },
     async (req, email, incomingPassword, done) => {
       try {
+        const result = await validateInput(
+          { email, password: incomingPassword },
+          UserDTO
+        );
+
         const searchedUser = await User.findOne({
-          where: { email },
+          where: { email: result.email },
           relations: {
             auth: true,
           },
@@ -50,7 +59,7 @@ passport.use(
         const { password } = searchedUser.auth;
         const [salt] = password.split(":");
 
-        if (createSaltAndHash(incomingPassword, salt) != password)
+        if (createSaltAndHash(result.password, salt) != password)
           return done(null, false, "Contraseña incorrecta" as any);
 
         req["token"] = createToken({

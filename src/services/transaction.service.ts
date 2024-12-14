@@ -1,9 +1,17 @@
 import Transaction from "../repositories/transaction.rep";
 
+import TransactionDTO from "../dto/transaction.dto";
+
+import validateInput from "../utils/classValidator.util";
+
 class TransactionService {
   static async create(data) {
     try {
-      await Transaction.save(data.transactions);
+      const transactionsValidated = data.transactions.map(
+        async (transaction) => await validateInput(transaction, TransactionDTO)
+      );
+
+      await Transaction.save(await Promise.all(transactionsValidated));
     } catch (error) {
       throw error;
     }

@@ -8,18 +8,7 @@ import {
 
 import { Property } from "./Property.entity";
 
-enum PropertyType {
-  APARTMENT = "apartment",
-  HOUSE = "house",
-  RETAIL = "retail",
-  LAND = "land",
-  INDUSTRIAL = "industrial",
-}
-
-enum Status {
-  FOR_SALE = "for_sale",
-  FOR_LEASE = "for_lease",
-}
+import { PropertyType, Status } from "../schemas/advertisement.enum";
 
 @Entity()
 class Advertisement {

@@ -8,4 +8,4 @@ function createToken(data) {
   return token;
 }
 
-export { createToken };
+export default createToken;

@@ -1,14 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Index,
+} from "typeorm";
 
 import { Property } from "./Property.entity";
 
-enum Type {
-  SALE_PURCHASE = "sale_purchase",
-  LEASE = "lease",
-  MORTGAGE = "mortgage",
-  JUDICIAL_SALE = "judicialSale",
-  OTHER = "other",
-}
+import { Type } from "../schemas/transaction.enum";
 
 @Entity()
 class Transaction {
@@ -21,6 +21,7 @@ class Transaction {
   @Column({
     type: "decimal",
   })
+  @Index()
   price: string;
 
   @Column({ type: "date" })

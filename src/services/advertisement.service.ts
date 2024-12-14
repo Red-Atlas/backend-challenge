@@ -1,9 +1,17 @@
 import Advertisement from "../repositories/advertisement.rep";
 
+import AdvertisementDTO from "../dto/advertisement.dto";
+import validateInput from "../utils/classValidator.util";
+
 class AdvertisementService {
   static async create(data) {
     try {
-      await Advertisement.save(data.advertisements);
+      const advertisementsValidated = data.advertisements.map(
+        async (advertisement) =>
+          await validateInput(advertisement, AdvertisementDTO)
+      );
+
+      await Advertisement.save(await Promise.all(advertisementsValidated));
     } catch (error) {
       throw error;
     }

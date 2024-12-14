@@ -9,12 +9,7 @@ import {
 import { Advertisement } from "./Advertisement.entity";
 import { Transaction } from "./Transaction.entity";
 
-enum Sector {
-  RESIDENTIAL = "residential",
-  COMMERCIAL = "commercial",
-  INDUSTRIAL = "industrial",
-  AGRICULTURAL = "agricultural",
-}
+import { Sector } from "../schemas/property.enum";
 
 @Entity()
 class Property {

@@ -1,17 +1,24 @@
 import Property from "../repositories/property.rep";
 
+import PropertyDTO from "../dto/property.dto";
+import validateInput from "../utils/classValidator.util";
+
 class PropertyService {
   static async create(data) {
     try {
-      const properties = data.properties.map((property) => ({
-        ...property,
-        coordinates: {
-          type: "Point",
-          coordinates: property.coordinates,
-        },
-      }));
+      const propertiesValidated = data.properties.map(async (property) => {
+        const result = await validateInput(property, PropertyDTO);
 
-      await Property.save(properties);
+        return {
+          ...result,
+          coordinates: {
+            type: "Point",
+            coordinates: result.coordinates,
+          },
+        };
+      });
+
+      await Property.save(await Promise.all(propertiesValidated));
     } catch (error) {
       throw error;
     }
