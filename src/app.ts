@@ -16,7 +16,7 @@ app.use(userRouter);
 app.use(authRouter);
 app.use(transactionRouter);
 app.use(propertyRouter);
-app.use(advertisementsRouter);
+app.use(advertisementsRouter)
 
 // error handlers
 app.use(notFoundHandler);
