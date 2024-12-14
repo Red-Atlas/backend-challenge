@@ -31,6 +31,16 @@ class PropertyController extends BaseController {
       next(error);
     }
   }
+
+  async locations(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await Property.locations(req.query);
+
+      res.status(200).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new PropertyController();

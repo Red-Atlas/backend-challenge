@@ -8,10 +8,14 @@ const addFieldsFromQuery = (
   queryBuilder: SelectQueryBuilder<Property>,
   userQuery
 ) => {
-  const { address, sector, advertisementId } = userQuery;
-  const { area } = setOperator("propery", userQuery);
+  const { address, sector, advertisement } = userQuery;
+  const parsedQuery = setOperator("propery", userQuery);
 
-  if (area) queryBuilder.andWhere(area.sql, area.value);
+  if (parsedQuery.area) {
+    const { area } = parsedQuery;
+
+    queryBuilder.andWhere(area.sql, area.value);
+  }
 
   if (address)
     queryBuilder.andWhere("property.address ILIKE :address", {
@@ -23,10 +27,21 @@ const addFieldsFromQuery = (
       sector,
     });
 
-  if (advertisementId)
-    queryBuilder
-      .leftJoinAndSelect("property.advertisements", "advertisement")
-      .where("advertisement.id = :advertisementId", { advertisementId });
+  if (advertisement) {
+    queryBuilder.leftJoinAndSelect("property.advertisements", "advertisement");
+
+    if (userQuery["advertisement.id"]) {
+      const { sql, value } = parsedQuery["advertisement.id"];
+
+      queryBuilder.andWhere(sql, value);
+    }
+
+    if (userQuery["advertisement.price"]) {
+      const { sql, value } = parsedQuery["advertisement.price"];
+
+      queryBuilder.andWhere(sql, value);
+    }
+  }
 
   return queryBuilder;
 };
@@ -48,7 +63,9 @@ const PropertyRepository = AppDataSource.getRepository(Property).extend({
       "property"
     ) as SelectQueryBuilder<Property>;
 
-    return await queryBuilder
+    const queryParsed = setPagination(queryBuilder, {});
+
+    return await queryParsed
       .select("property.sector", "sector")
       .addSelect("COUNT(property.id)", "count")
       .groupBy("property.sector")
@@ -61,13 +78,64 @@ const PropertyRepository = AppDataSource.getRepository(Property).extend({
       "property"
     ) as SelectQueryBuilder<Property>;
 
-    return await queryBuilder
+    const queryParsed = setPagination(queryBuilder, {});
+
+    return await queryParsed
       .innerJoin("property.advertisements", "advertisement")
       .select("property.sector", "sector")
       .addSelect("AVG(advertisement.price)", "averagePrice")
       .groupBy("property.sector")
       .orderBy("averagePrice", "DESC")
       .getRawMany();
+  },
+
+  async findLocationsNearby(
+    latitude: number,
+    longitude: number,
+    radius: number
+  ) {
+    const queryBuilder = this.createQueryBuilder(
+      "property"
+    ) as SelectQueryBuilder<Property>;
+    const radiusInMeters = radius * 1000;
+
+    const queryParsed = setPagination(queryBuilder, {});
+
+    const locations = await queryParsed
+      .where(
+        `ST_DWithin(
+          property.coordinates::geography,
+          ST_SetSRID(ST_MakePoint(:latitude, :longitude), 4326)::geography,
+          :radius
+        )`,
+        { longitude, latitude, radius: radiusInMeters }
+      )
+      .getMany();
+
+    return locations;
+  },
+
+  async findPropertiesByDistance(
+    latitude: number,
+    longitude: number
+  ): Promise<Property[]> {
+    const queryBuilder = this.createQueryBuilder(
+      "property"
+    ) as SelectQueryBuilder<Property>;
+
+    const queryParsed = setPagination(queryBuilder, {});
+
+    return await queryParsed
+      .addSelect(
+        `ST_Distance(
+          property.coordinates::geography,
+          ST_SetSRID(ST_MakePoint(:latitude, :longitude), 4326)::geography
+        )`,
+        "distance"
+      )
+      .setParameters({ latitude, longitude })
+      .orderBy("distance", "ASC")
+      .getMany();
   },
 });
 

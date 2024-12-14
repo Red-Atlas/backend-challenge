@@ -34,6 +34,9 @@ class Property {
   @Column({ type: "enum", enum: Sector })
   sector: string;
 
+  @Column({ type: "geometry", spatialFeatureType: "Point", srid: 4326 })
+  coordinates: string;
+
   @OneToMany(() => Advertisement, (advertisement) => advertisement.property)
   advertisements: Advertisement[];
 

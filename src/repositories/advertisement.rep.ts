@@ -9,25 +9,30 @@ const addFieldsFromQuery = (
   queryBuilder: SelectQueryBuilder<Advertisement>,
   userQuery
 ) => {
-  const { id, status, sector } = userQuery;
-  const { price } = setOperator("advertisement", userQuery);
+  const { status, type } = userQuery;
+  const queryParsed = setOperator("advertisement", userQuery);
 
-  if (id)
-    queryBuilder.andWhere("advertisement.id = :id", {
-      id,
-    });
+  if (queryParsed.price) {
+    const { sql, value } = queryParsed.price;
 
-  if (price) queryBuilder.andWhere(price.sql, price.value);
+    queryBuilder.andWhere(sql, value);
+  }
 
   if (status)
     queryBuilder.andWhere("advertisement.status = :status", {
       status,
     });
 
-  if (sector)
-    queryBuilder.andWhere("advertisement.sector = :sector", {
-      sector,
+  if (type)
+    queryBuilder.andWhere("advertisement.propertyType = :type", {
+      type,
     });
+
+  if (queryParsed["property.area"]) {
+    const { sql, value } = queryParsed["property.area"];
+
+    queryBuilder.andWhere(sql, value);
+  }
 
   return queryBuilder;
 };
@@ -44,10 +49,16 @@ const AdvertisementRepository = AppDataSource.getRepository(
 
     const queryParsed = setPagination(parsedParams, query);
 
-    return queryParsed
-      .leftJoinAndSelect("advertisement.property", "property")
-      .select("advertisement.price * property.area", "valuation")
-      .addSelect("property.* , advertisement.*")
+    return await queryParsed
+      .leftJoin("advertisement.property", "property")
+      .addSelect([
+        "property.id",
+        "property.address",
+        "property.area",
+        "property.ownerName",
+        "property.sector",
+      ])
+      .addSelect("advertisement.price * property.area", "valuation")
       .getRawMany();
   },
 
@@ -56,7 +67,9 @@ const AdvertisementRepository = AppDataSource.getRepository(
       "advertisement"
     ) as SelectQueryBuilder<Advertisement>;
 
-    return await queryBuilder
+    const queryParsed = setPagination(queryBuilder, {});
+
+    return await queryParsed
       .select("advertisement.propertyType", "propertyType")
       .addSelect("COUNT(advertisement.id)", "count")
       .groupBy("advertisement.propertyType")

@@ -7,6 +7,8 @@ const router = Router();
 router.get("/stats/sectors", property.groupAndCountBySector);
 router.get("/stats/sectors/prices", property.getAveragePriceBySector);
 
+router.get("/locations", property.locations);
+
 router.post("/", property.create);
 router.get("/", property.findAll);
 router.get("/:id", property.findById);

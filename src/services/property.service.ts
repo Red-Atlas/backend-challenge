@@ -3,7 +3,15 @@ import Property from "../repositories/property.rep";
 class PropertyService {
   static async create(data) {
     try {
-      await Property.save(data.properties);
+      const properties = data.properties.map((property) => ({
+        ...property,
+        coordinates: {
+          type: "Point",
+          coordinates: property.coordinates,
+        },
+      }));
+
+      await Property.save(properties);
     } catch (error) {
       throw error;
     }
@@ -12,6 +20,20 @@ class PropertyService {
   static async getBySector() {
     try {
       return await Property.getPropertiesBySector();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async locations(query) {
+    try {
+      const { latitude, longitude, radius } = query;
+
+      if (radius) {
+        return await Property.findLocationsNearby(latitude, longitude, radius);
+      } else {
+        return Property.findPropertiesByDistance(latitude, longitude);
+      }
     } catch (error) {
       throw error;
     }

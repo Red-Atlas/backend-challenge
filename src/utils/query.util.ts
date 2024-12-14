@@ -19,8 +19,12 @@ const setOperator = (entity: string, query) => {
 
     if (typeof query[key] == "object") operator = Object.keys(query[key])[0];
 
+    let entityParsed = `${entity}.${key}`;
+
+    if (key.includes(".")) entityParsed = key; // Si tiene un punto transformo la propiedad para que entre en la tabla asociada
+
     obj[key] = {
-      sql: `${entity}.${key} ${operator} :${key}`,
+      sql: `${entityParsed} ${operator} :${key}`,
       value: { [key]: query[key][operator] || query[key] },
     };
   }
