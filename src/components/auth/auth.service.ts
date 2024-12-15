@@ -102,7 +102,7 @@ async function currentUser(token: string) {
     },
   });
 
-  throw new Error('Unauthorized: Invalid user')
+  if(!user) throw new Error('Unauthorized: Invalid user')
 
   return user;
 }
