@@ -53,7 +53,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
   ],
   controllers: [AppController],
   providers: [
-    AppService,
+    // AppService,
     // {
     //   provide: APP_GUARD,
     //   useClass: JwtAuthGuard,
