@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Role } from "../entities/Auth.entity";
+import { Role } from "../schemas/role.enum";
 
 function checkRole(allowedRoles: number[]) {
   return (req: Request, res: Response, next: NextFunction) => {

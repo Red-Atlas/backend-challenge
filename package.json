@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "tsnd src/index.ts --env development",
     "build": "tsc",
+    "migration:check": "typeorm migration:show -d ./dist/database/connect.js",
+    "migration:run": "typeorm migration:run -d ./dist/database/connect.js",
+    "migration:revert": "typeorm migration:revert -d ./dist/database/connects.js",
+    "start:dev": "node dist/index.js --env development",
     "start": "node dist/index.js"
   },
   "keywords": [],
@@ -24,17 +28,15 @@
     "passport-local": "^1.0.0",
     "pg": "^8.4.0",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "0.3.20",
-    "typescript": "^5.7.2"
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
-    "@types/node": "^16.11.10",
     "@types/passport": "^1.0.17",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "dotenv": "^16.4.7",
-    "ts-node": "10.9.1",
+    "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
-    "typescript": "4.5.2"
+    "typescript": "^5.7.2"
   }
 }
