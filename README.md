@@ -12,7 +12,7 @@ Esta API RESTful permite la gestión de bienes raíces, incluyendo propiedades, 
 - **Contenerización**: Docker y Docker Compose
 
 ## Enlace del Deploy
-[Enlace del deploy en EC2](http://ec2-54-198-100-159.compute-1.amazonaws.com:3000/rutas)
+[Enlace del deploy en EC2](http://ec2-54-198-100-159.compute-1.amazonaws.com:3000/)
 
 ## Sugerencias para Configuración
 Es recomendable generar un archivo `.env` y modificar el archivo `docker-compose.yml` si lo desean. Si solo quieren crear el `.env`, sugeriría usar las siguientes configuraciones para que puedan probar bien las migraciones:
