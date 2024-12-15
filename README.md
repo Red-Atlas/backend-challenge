@@ -29,7 +29,7 @@ PORT=3000
 ```
 
 ## Enlace de la Documentación
-[Documentación en Postman](#)  
+[Documentación en Postman](https://documenter.getpostman.com/view/12355254/2sAYHxoPw1)  
 **Nota**: Por defecto, la URL de la API es `http://localhost:3000`.
 
 ## Instalación y Ejecución
