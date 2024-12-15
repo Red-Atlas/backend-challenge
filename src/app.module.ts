@@ -36,7 +36,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
           entities: [User, Property, Listing, Transaction],
           migrations: [__dirname + '/../migrations/*{.ts,.js}'],
           migrationsRun: true,
-          synchronize: true,
+          synchronize: false,
           logging: true,
           // ssl: {
           //   rejectUnauthorized: false, // Permitir la conexión SSL incluso si el certificado no es completamente validado

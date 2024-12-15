@@ -6,6 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "m:gen": "ts-node -O '{\"module\":\"CommonJS\"}' node_modules/typeorm/cli.js migration:generate --dataSource src/config/data-source.ts --outputJs src/migrations/$npm_config_name",
+    "m:run": "ts-node -O '{\"module\":\"CommonJS\"}' node_modules/typeorm/cli.js migration:run --dataSource src/config/data-source.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -17,7 +19,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+    "migration:generate": "npm run typeorm -- migration:generate",
+    "migration:run": "npm run typeorm -- migration:run"
+    
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -34,6 +40,7 @@
     "class-validator": "^0.14.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "dotenv-cli": "^7.4.4",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.13.1",
