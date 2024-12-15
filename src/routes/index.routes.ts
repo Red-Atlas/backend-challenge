@@ -6,20 +6,11 @@ import transactions from "./transaction.routes";
 import advertisements from "./advertisement.routes";
 
 import queryBuilder from "../middlewares/queryBuilder";
-import checkRole from "../middlewares/checkRole.mid";
-import passportCb from "../middlewares/passportCb.mid";
-
-import { Role } from "../schemas/role.enum";
 
 const router = Router();
 
 router.use("/auth", auth);
-router.use(
-  "/properties",
-  queryBuilder,
-  /*passportCb("jwt"), checkRole([Role.USER]),*/
-  property
-);
+router.use("/properties", queryBuilder, property);
 router.use("/transactions", queryBuilder, transactions);
 router.use("/advertisements", queryBuilder, advertisements);
 

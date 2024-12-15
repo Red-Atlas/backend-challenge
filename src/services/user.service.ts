@@ -24,30 +24,9 @@ class UserService {
     }
   }
 
-  static async findAll(query) {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  }
-
   static async findOne(where) {
     try {
       return await User.findOne({ where });
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async updateById(id, data) {
-    try {
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async deleteById(id) {
-    try {
     } catch (error) {
       throw error;
     }

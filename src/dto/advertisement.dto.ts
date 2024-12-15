@@ -1,6 +1,15 @@
 import { PropertyType, Status } from "../schemas/advertisement.enum";
 
-import { IsNumber, IsPositive, IsEnum } from "class-validator";
+import {
+  IsNumber,
+  IsPositive,
+  IsEnum,
+  IsObject,
+  IsInt,
+  IsDefined,
+} from "class-validator";
+
+import { Property } from "../entities/Property.entity";
 
 class AdvertisementDTO {
   @IsNumber({}, { message: "El precio debe ser numerico" })
@@ -14,6 +23,12 @@ class AdvertisementDTO {
     message: "tipos admitidos: apartment, house, retail, land, industrial",
   })
   propertyType: string;
+
+  @IsObject()
+  @IsDefined()
+  property: {
+    id: number;
+  };
 }
 
 export default AdvertisementDTO;

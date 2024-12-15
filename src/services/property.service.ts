@@ -74,7 +74,17 @@ class PropertyService {
 
   static async updateById(id, data) {
     try {
-      return await Property.update({ id }, data);
+      const result = await validateInput(data, PropertyDTO);
+
+      const propertyParsed = {
+        ...result,
+        coordinates: {
+          type: "Point",
+          coordinates: result.coordinates,
+        },
+      };
+
+      return await Property.update({ id }, propertyParsed);
     } catch (error) {
       throw error;
     }
@@ -84,6 +94,15 @@ class PropertyService {
     try {
       await Property.delete({ id });
     } catch (error) {
+      if (error.code == "23503") {
+        const error = new Error(
+          "No se puede eliminar la propiedad ya que tiene anuncios relacionados"
+        );
+        error["statusCode"] = 400;
+
+        throw error;
+      }
+
       throw error;
     }
   }

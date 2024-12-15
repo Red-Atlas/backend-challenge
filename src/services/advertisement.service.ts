@@ -47,7 +47,9 @@ class AdvertisementService {
 
   static async updateById(id, data) {
     try {
-      return await Advertisement.update({ id }, data);
+      const result = await validateInput(data, AdvertisementDTO);
+
+      return await Advertisement.update({ id }, result);
     } catch (error) {
       throw error;
     }

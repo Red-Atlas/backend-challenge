@@ -85,7 +85,6 @@ const PropertyRepository = AppDataSource.getRepository(Property).extend({
       .select("property.sector", "sector")
       .addSelect("AVG(advertisement.price)", "averagePrice")
       .groupBy("property.sector")
-      .orderBy("averagePrice", "DESC")
       .getRawMany();
   },
 

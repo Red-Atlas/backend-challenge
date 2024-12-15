@@ -4,12 +4,14 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   Index,
+  ManyToOne,
 } from "typeorm";
 
 import { Advertisement } from "./Advertisement.entity";
 import { Transaction } from "./Transaction.entity";
 
 import { Sector } from "../schemas/property.enum";
+import { User } from "./User.entity";
 
 @Entity()
 class Property {
@@ -37,6 +39,9 @@ class Property {
 
   @OneToMany(() => Advertisement, (transaction) => transaction.property)
   transactions: Transaction[];
+
+  @ManyToOne(() => User, (user) => user.properties)
+  user: User;
 }
 
 export { Property };

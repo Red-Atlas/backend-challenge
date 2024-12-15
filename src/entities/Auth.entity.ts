@@ -21,7 +21,7 @@ class Auth {
   role: string;
 
   @OneToOne(() => User, (user) => user.auth)
-  @JoinColumn()
+  @JoinColumn({ foreignKeyConstraintName: "userId" })
   user: User;
 }
 

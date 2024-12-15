@@ -4,7 +4,7 @@ import {
   IsNumber,
   IsPositive,
   IsEnum,
-  IsDate,
+  Matches,
   IsString,
 } from "class-validator";
 
@@ -16,8 +16,10 @@ class TransactionDTO {
   @IsPositive({ message: "El precio debe ser mayor a 0" })
   price: string;
 
-  @IsDate({ message: "La fecha debe ser de tipo fecha" })
-  date: Date;
+  @Matches(/^\d{4}-\d{2}-\d{2}$/, {
+    message: "La fecha debe estar en el formato aaaa-mm-dd",
+  })
+  date: string;
 
   @IsEnum(Type, {
     message:

@@ -9,6 +9,7 @@ import {
 import { Property } from "./Property.entity";
 
 import { Type } from "../schemas/transaction.enum";
+import { User } from "./User.entity";
 
 @Entity()
 class Transaction {
@@ -32,6 +33,9 @@ class Transaction {
 
   @ManyToOne(() => Property, (property) => property.transactions)
   property: Property;
+
+  @ManyToOne(() => User, (user) => user.transactions)
+  user: User;
 }
 
 export { Transaction };

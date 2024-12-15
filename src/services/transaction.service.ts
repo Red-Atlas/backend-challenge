@@ -47,7 +47,9 @@ class TransactionService {
 
   static async updateById(id, data) {
     try {
-      return await Transaction.update({ id }, data);
+      const result = await validateInput(data, TransactionDTO);
+
+      return await Transaction.update({ id }, result);
     } catch (error) {
       throw error;
     }
