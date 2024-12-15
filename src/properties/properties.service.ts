@@ -373,4 +373,85 @@ export class PropertiesService {
         `El precio máximo registrado es ${maxPrice.toFixed(2)} y el precio mínimo es ${minPrice.toFixed(2)}.`,
     };
   }
+  //Obtener distribucion por sector
+  async getDistributionBySector(): Promise<any> {
+    const result = await this.listingsRepository
+      .createQueryBuilder('listing')
+      .select('property.sector', 'sector')
+      .addSelect('COUNT(listing.id)', 'totalListings')
+      .addSelect('AVG(listing.price)', 'averagePrice')
+      .innerJoin('listing.property', 'property')
+      .groupBy('property.sector')
+      .getRawMany();
+
+    return result.map((sectorData) => ({
+      sector: sectorData.sector,
+      totalProperties: sectorData.totalListings,
+      averagePrice: parseFloat(sectorData.averagePrice) || 0,
+      totalListings: parseInt(sectorData.totalListings, 10) || 0,
+    }));
+  }
+  //Genero estadisticas por el tipo de propiedad
+  async getStatisticsByPropertyType(): Promise<any> {
+    const result = await this.listingsRepository
+      .createQueryBuilder('listing')
+      .select('listing.property_type', 'propertyType')
+      .addSelect('COUNT(listing.id)', 'totalCount')
+      .groupBy('listing.property_type')
+      .getRawMany();
+
+    return result.map((item) => ({
+      propertyType: item.propertyType,
+      totalCount: parseInt(item.totalCount, 10),
+      description: `Cantidad total de propiedades del tipo '${item.propertyType}'`,
+    }));
+  }
+
+  //Demuestra cuales son los sectores mas caros
+  async getHighestAveragePrice(): Promise<any> {
+    //Lo hice en sql como se recomendo en challenge
+    const query = `
+      SELECT 
+        "listing"."property_type" AS "propertyType", 
+        "property"."sector" AS "sector", 
+        AVG("listing"."price") AS "averagePrice", 
+        STDDEV("listing"."price") AS "priceStdDev", 
+        COUNT("listing"."id") AS "totalProperties", 
+        AVG("listing"."price" / "property"."area") AS "pricePerSquareMeter"
+      FROM 
+        "listings" "listing"
+      INNER JOIN 
+        "properties" "property" 
+        ON "property"."id" = "listing"."property_id"
+      GROUP BY 
+        "listing"."property_type", "property"."sector"
+      ORDER BY 
+        "averagePrice" DESC;
+    `;
+
+    try {
+      const result = await this.listingsRepository.query(query);
+
+      const groupedResults = result.reduce((acc, item) => {
+        if (!acc[item.sector]) {
+          acc[item.sector] = [];
+        }
+
+        acc[item.sector].push({
+          propertyType: item.propertyType,
+          averagePrice: parseFloat(item.averagePrice),
+          priceStdDev: parseFloat(item.priceStdDev),
+          totalProperties: parseInt(item.totalProperties),
+          pricePerSquareMeter: parseFloat(item.pricePerSquareMeter),
+        });
+
+        return acc;
+      }, {});
+
+      return groupedResults;
+    } catch (error) {
+      console.error('Error al obtener los resultados:', error);
+      throw new Error('Error al obtener los resultados');
+    }
+  }
 }

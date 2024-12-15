@@ -81,4 +81,21 @@ export class PropertiesController {
   getAveragePriceBySector(@Param('sector') sector: string) {
     return this.propertiesService.getAveragePriceBySector(sector);
   }
+
+  @Get('sector/distribution')
+  getDistributionBySector() {
+    return this.propertiesService.getDistributionBySector();
+  }
+
+  // Endpoint para obtener estadísticas de tipos de propiedades
+  @Get('statistics/types')
+  getPropertyTypesStatistics() {
+    return this.propertiesService.getStatisticsByPropertyType();
+  }
+
+  //  Endpoint para obtener los sectores mas  caros
+  @Get('highest/average/price')
+  getHighestAveragePrice() {
+    return this.propertiesService.getHighestAveragePrice();
+  }
 }
