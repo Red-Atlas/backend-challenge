@@ -15,7 +15,7 @@ export const AppDataSource = new DataSource({
     rejectUnauthorized: process.env.NODE_ENV == "production",
   },
   // migrationsRun: true,
-  entities: [join(__dirname + "/components/**/*.entity.{js, ts}")],
-  migrations: [join(__dirname + "/migrations/*.{js, ts}")
+  entities: ["dist/src/components/**/*.js", join(__dirname + "/components/**/*.entity.{j,t}s"),],
+  migrations: ["dist/src/migrations/*.js", join(__dirname + "/migrations/*.{j,t}s")
   ],
 });
