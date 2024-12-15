@@ -11,6 +11,7 @@
     "skipLibCheck": true,
     "strict": true,
     "emitDecoratorMetadata": true,
+    "noImplicitAny": false,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
   },
