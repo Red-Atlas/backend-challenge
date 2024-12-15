@@ -22,12 +22,6 @@ export class UsersService {
     private transactionRepository: Repository<Transaction>,
   ) {}
 
-  // Crear un usuario
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const newUser = this.userRepository.create(createUserDto);
-    return this.userRepository.save(newUser);
-  }
-
   // Obtener todos los usuarios sin datos sensibles
   async findAll(): Promise<UserWithoutSensitiveData[]> {
     const users = await this.userRepository.find();
