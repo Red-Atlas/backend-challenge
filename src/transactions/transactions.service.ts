@@ -11,6 +11,7 @@ import { QueryFailedError, Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Property } from 'src/properties/entities/property.entity';
 import { TransactionType } from './enums/transaction-type.enum';
+import { Listing } from 'src/listings/entities/listing.entity';
 
 @Injectable()
 export class TransactionsService {
@@ -21,6 +22,8 @@ export class TransactionsService {
     private readonly propertyRepository: Repository<Property>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Listing)
+    private readonly listingRepository: Repository<Listing>,
   ) {}
 
   async findAll(page: number = 1, limit: number = 10, filters: any = {}) {
@@ -127,7 +130,8 @@ export class TransactionsService {
 
   // Crear Transacción
   async create(createTransactionDto: CreateTransactionDto) {
-    const { price, type, property_id, user_id } = createTransactionDto;
+    const { price, type, property_id, user_id, listing_id } =
+      createTransactionDto;
 
     // Validación de precio
     if (isNaN(price) || price <= 0) {
@@ -142,6 +146,15 @@ export class TransactionsService {
     });
     if (!property) {
       throw new NotFoundException(`Property with ID ${property_id} not found`);
+    }
+
+    // Verificar que la listing existe
+    const listing = await this.listingRepository.findOne({
+      where: { id: listing_id },
+    });
+
+    if (!listing) {
+      throw new NotFoundException(`Add with ID ${listing_id} not found`);
     }
 
     // Verificar que el usuario existe
@@ -166,7 +179,7 @@ export class TransactionsService {
   async findOne(id: number) {
     const transaction = await this.transactionRepository.findOne({
       where: { id },
-      relations: ['property', 'user'], // Cargamos las relaciones de propiedad y usuario
+      relations: ['property', 'user'],
     });
     if (!transaction) {
       throw new NotFoundException(`Transaction with ID ${id} not found`);

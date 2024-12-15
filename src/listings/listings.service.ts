@@ -230,11 +230,12 @@ export class ListingsService {
     const listing = await this.listingRepository.findOne({ where: { id } });
 
     if (!listing) {
-      throw new Error(`Listing with id ${id} not found`);
+      throw new NotFoundException(`Listing with id ${id} not found`);
     }
 
     return await this.listingRepository.remove(listing);
   }
+
   //Histogramas
   async getListingsWithHistogramData(
     page: number,

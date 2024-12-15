@@ -15,6 +15,9 @@ export class CreateTransactionDto {
   property_id: number;
 
   @IsNumber()
+  listing_id: number;
+
+  @IsNumber()
   @IsOptional()
   user_id?: number;
 

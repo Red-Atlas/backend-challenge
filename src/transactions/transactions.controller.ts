@@ -8,24 +8,32 @@ import {
   Delete,
   Query,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionType } from './enums/transaction-type.enum';
+import { JwtAuthGuard } from 'src/auth/guards/auth-jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/users/enums/role.enum';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('transactions')
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   // Crear una nueva transacción
   @Post()
+  @Roles(Role.ADMIN, Role.USER)
   create(@Body() createTransactionDto: CreateTransactionDto) {
     return this.transactionsService.create(createTransactionDto);
   }
 
   // Obtener todas las transacciones con filtros y paginación
   @Get()
+  @Roles(Role.ADMIN, Role.USER)
   async findAll(
     @Query('page') page: number = 1, // Página actual, por defecto es 1
     @Query('limit') limit: number = 10, // Límite de resultados por página, por defecto es 10
@@ -53,12 +61,14 @@ export class TransactionsController {
 
   // Obtener una transacción por ID
   @Get(':id')
+  @Roles(Role.ADMIN, Role.USER)
   findOne(@Param('id') id: string) {
     return this.transactionsService.findOne(+id);
   }
 
   // Actualizar una transacción
   @Patch(':id')
+  @Roles(Role.ADMIN, Role.USER)
   update(
     @Param('id') id: string,
     @Body() updateTransactionDto: UpdateTransactionDto,
@@ -68,11 +78,13 @@ export class TransactionsController {
 
   // Eliminar una transacción
   @Delete(':id')
+  @Roles(Role.ADMIN)
   remove(@Param('id') id: string) {
     return this.transactionsService.remove(+id);
   }
   // Generar Tendencias
   @Get('/order/trends')
+  @Roles(Role.ADMIN)
   async getTrends(
     @Query('type') type: TransactionType,
     @Query('groupBy') groupBy: 'month' | 'year',
