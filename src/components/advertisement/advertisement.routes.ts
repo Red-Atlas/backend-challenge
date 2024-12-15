@@ -9,15 +9,19 @@ import {
   inactiveAdvertisement,
   updateAdvertisement
 } from './advertisement.controller.js';
+import { adminAuthenticate } from 'middlewares/adminAuthenticate.js';
 
 const advertisementsRouter = Router();
 
-advertisementsRouter.post('/advertisements', authenticate, createAdvertisement);
-advertisementsRouter.get('/advertisements', authenticate, getAdvertisements);
-advertisementsRouter.get('/advertisements/price-range', authenticate, getAdvertisementsPriceRange);
-advertisementsRouter.get('/advertisements/:id', authenticate, getAdvertisement);
-advertisementsRouter.put('/advertisements/:id', authenticate, updateAdvertisement);
-advertisementsRouter.delete('/advertisements/:id', authenticate, deleteAdvertisement);
-advertisementsRouter.patch('/advertisements/:id', authenticate, inactiveAdvertisement);
+// Statistics/Graphs Routes
+advertisementsRouter.get('/analytics/price-range', adminAuthenticate, getAdvertisementsPriceRange);
+
+// CRUDS
+advertisementsRouter.post('/', authenticate, createAdvertisement);
+advertisementsRouter.get('/', authenticate, getAdvertisements);
+advertisementsRouter.get('/:id', authenticate, getAdvertisement);
+advertisementsRouter.put('/:id', authenticate, updateAdvertisement);
+advertisementsRouter.delete('/:id', authenticate, deleteAdvertisement);
+advertisementsRouter.patch('/:id/inactive', adminAuthenticate, inactiveAdvertisement);
 
 export default advertisementsRouter;

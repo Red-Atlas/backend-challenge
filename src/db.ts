@@ -1,8 +1,7 @@
+import './config/env.js';
 import { DataSource } from 'typeorm';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import * as dotenv from 'dotenv';
-dotenv.config({ path: 'src/.env'})
 
 // Define __dirname manualmente
 const __filename = fileURLToPath(import.meta.url);

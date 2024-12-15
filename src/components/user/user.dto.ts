@@ -19,8 +19,9 @@ export interface IUser extends IBaseEntityType {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
   role: TUserRole;
+  googleId?: string;
+  password?: string;
   property?: Property[];
   phone?: string;
   transactions?: ITransaction[]

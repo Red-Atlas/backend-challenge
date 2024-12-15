@@ -141,3 +141,38 @@ export async function getPropertiesWithValuation(
     next(error);
   }
 };
+
+export async function findPropertiesWithinRadius(
+  req: Request, res: Response, next: NextFunction
+): Promise<any> {
+  try {
+    const propertiesWithinRadius =
+      await propertyService.findPropertiesWithinRadius({ ...req.body, ...req.query })
+    return res.status(200).json({ success: true, data: propertiesWithinRadius })
+  } catch (error) {
+    next(error);
+  }
+};
+
+export async function findPropertiesOrderedByProximity(
+  req: Request, res: Response, next: NextFunction
+): Promise<any> {
+  try {
+    const propertiesOrderedProximity =
+      await propertyService.findPropertiesOrderedByProximity({ ...req.body, ...req.query })
+    return res.status(200).json({ success: true, data: propertiesOrderedProximity })
+  } catch (error) {
+    next(error);
+  }
+};
+
+export async function calculateTotalArea(
+  req: Request, res: Response, next: NextFunction
+): Promise<any> {
+  try {
+    const totalArea = await propertyService.calculateTotalArea(req.body)
+    return res.status(200).json({ success: true, data: totalArea })
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,5 +1,5 @@
 import { DeepPartial } from "typeorm";
-import { IProperty, TCreateProperty, TPaginationProperty } from "./property.dto.js";
+import { IProperty, TCreateProperty, TPaginationProperty, TPropertyGeoLocation } from "./property.dto.js";
 import { Property } from "./property.entity.js";
 import { TSortingType } from "../utils/sorting.js";
 import { AppDataSource } from "db.js";
@@ -174,6 +174,91 @@ async function getPropertiesWithValuation(data: TPagination) {
   });
 }
 
+async function findPropertiesWithinRadius(data: TPropertyGeoLocation & TPagination) {
+  const propertyRepository = AppDataSource.getRepository(Property);
+  const { longitude, latitude, radiusKm } = data
+
+  const { limit, page, skip } = getPaginationParams(data.page, data.perPage);
+
+  const radiusMeters = radiusKm * 1000;
+
+  const [ properties , total ] = await propertyRepository
+    .createQueryBuilder('property')
+    .where(
+      `ST_DWithin(
+        property.location::geography,
+        ST_SetSRID(ST_Point(:longitude, :latitude), 4326)::geography,
+        :radius
+      )`,
+      { longitude, latitude, radius: radiusMeters }
+    )
+    .skip(skip)
+    .take(limit)
+    .getManyAndCount();
+
+  return {
+    data: properties,
+    pagination: {
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      perPage: limit,
+    },
+  }
+}
+
+async function findPropertiesOrderedByProximity(
+  data: Omit<TPropertyGeoLocation, 'radiusKm'> & TPagination
+) {
+  const propertyRepository = AppDataSource.getRepository(Property);
+
+   const { longitude, latitude } = data
+
+  const { limit, page, skip } = getPaginationParams(data.page, data.perPage);
+
+  const [ properties, total ] = await propertyRepository
+    .createQueryBuilder('property')
+    .addSelect(
+      `ST_Distance(
+        property.location,
+        ST_SetSRID(ST_Point(:longitude, :latitude), 4326)
+      )`,
+      'distance'
+    )
+    .orderBy('distance', 'ASC')
+    .setParameters({ longitude, latitude })
+    .skip(skip)
+    .take(limit)
+    .getManyAndCount();
+  
+  return {
+    data: properties,
+    pagination: {
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      perPage: limit,
+    },
+  }
+}
+
+async function calculateTotalArea(sectorPolygon: any) {
+  const propertyRepository = AppDataSource.getRepository(Property);
+
+  return propertyRepository
+    .createQueryBuilder('property')
+    .select(`SUM(ST_Area(ST_Transform(property.location, 3857)))`, 'total_area')
+    .where(
+      `ST_Within(
+        property.location,
+        ST_GeomFromGeoJSON(:sector)
+      )`,
+      { sector: JSON.stringify(sectorPolygon) }
+    )
+    .getRawOne();
+}
+
+
 export const propertyService = Object.freeze({
   findOne,
   find,
@@ -186,4 +271,7 @@ export const propertyService = Object.freeze({
   getDistributionBySector,
   getPropertiesByType,
   getAveragePricesBySector,
+  findPropertiesWithinRadius,
+  findPropertiesOrderedByProximity,
+  calculateTotalArea,
 })

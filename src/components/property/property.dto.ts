@@ -13,6 +13,11 @@ export enum PropertySectorEnum {
 
 export type TPropertySectorEnum = keyof typeof PropertySectorEnum;
 
+export interface IGeoLocation {
+  type: 'Point' | 'MultiPoint' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
+  coordinates: [number, number];
+}
+
 export interface IProperty extends IBaseEntityType {
   address: string;
   owner: User;
@@ -20,6 +25,7 @@ export interface IProperty extends IBaseEntityType {
   description: string;
   area: number;
   yearBuilt: number;
+  location?: IGeoLocation
   transactions?: Transaction[];
   advertisement?: Advertisement[]
   amenities?: string;
@@ -27,7 +33,7 @@ export interface IProperty extends IBaseEntityType {
 };
 
 export type TCreateProperty =
-  Pick<IProperty, 'address' | 'owner' | 'sector' | 'description' | 'area' | 'yearBuilt'>
+  Omit<IProperty, 'transactions' | 'advertisement' | 'amenities' | 'images'>
 
 export type TPaginationProperty =
   Pick<IProperty, 'address' | 'owner' | 'sector' | 'active'> & TPagination & {
@@ -38,4 +44,8 @@ export type TPaginationProperty =
     maxYearBuilt: number;
   };
 
-
+export interface TPropertyGeoLocation {
+  latitude: number;
+  longitude: number;
+  radiusKm: number;
+}

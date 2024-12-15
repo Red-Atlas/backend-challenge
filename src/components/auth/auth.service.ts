@@ -49,7 +49,7 @@ async function signIn({
   email,
   password,
 }: { 
-  email: IUser['email'], password: IUser['password']
+  email: IUser['email'], password: User['password']
 }): Promise<{ user: IUser, token: string }> {
   const user = await userService.findOne({
     filter: {
@@ -102,6 +102,8 @@ async function currentUser(token: string) {
     },
   });
 
+  throw new Error('Unauthorized: Invalid user')
+
   return user;
 }
 
@@ -119,7 +121,7 @@ async function currentAdminUser(token: string) {
     role: 'ADMIN',
   });
 
-  if (!user) throw new Error('Access denied: User does not have admin privileges')
+  if (!user) throw new Error('Unauthorized: User does not have admin privileges')
 
   return user;
 }
@@ -129,4 +131,5 @@ export const authService = Object.freeze({
   signUp,
   currentUser,
   currentAdminUser,
+  signJWT,
 })

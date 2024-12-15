@@ -29,7 +29,7 @@ export class User extends BaseEntity implements IUser {
   @Column({ type: 'varchar', unique: true })
   email: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   password: string;
 
   @Column({ type: 'enum', enum: Object.keys(UserRole), default: 'USER'})
@@ -43,6 +43,9 @@ export class User extends BaseEntity implements IUser {
 
   @OneToMany(() => Property, (property) => property.owner)
   property: Relation<Property[]>;
+
+  @Column({ type: 'varchar', nullable: true })
+  googleId: string;
 
   @Column({ type: 'boolean', default: true })
   active: boolean;
@@ -63,6 +66,9 @@ export class User extends BaseEntity implements IUser {
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
+    if (!this.password) {
+      return;
+    }
     if (this.password.length < 6) {
       throw new Error('Password must be at least 6 characters long')
     }

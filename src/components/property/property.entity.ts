@@ -13,7 +13,7 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity.js';
 import { Advertisement } from '../advertisement/advertisement.entity.js';
-import { IProperty, PropertySectorEnum, TPropertySectorEnum } from './property.dto.js';
+import { IGeoLocation, IProperty, PropertySectorEnum, TPropertySectorEnum } from './property.dto.js';
 import { Transaction } from '../transaction/transaction.entity.js';
 
 @Entity()
@@ -53,6 +53,9 @@ export class Property extends BaseEntity implements IProperty {
 
   @OneToMany(() => Transaction, (transaction) => transaction.property)
   transactions: Relation<Transaction[]>;
+
+  @Column({ type: 'geometry', spatialFeatureType: 'Point', srid: 4326, nullable: true })
+  location: IGeoLocation;
 
   @Column({ type: 'boolean', default: true })
   active: boolean;

@@ -9,15 +9,19 @@ import {
   inactiveTransaction,
   updateTransaction
 } from './transaction.controller.js';
+import { adminAuthenticate } from 'middlewares/adminAuthenticate.js';
 
 const transactionRouter = Router();
 
-transactionRouter.post('/transactions', authenticate, createTransaction);
-transactionRouter.get('/transactions', authenticate, getTransactions);
-transactionRouter.get('/transactions/periods', authenticate, getTransactionByPeriods);
-transactionRouter.get('/transactions/:id', authenticate, getTransaction);
-transactionRouter.put('/transactions/:id', authenticate, updateTransaction);
-transactionRouter.delete('/transactions/:id', authenticate, deleteTransaction);
-transactionRouter.patch('/transactions/:id', authenticate, inactiveTransaction);
+// Statistics/Graphs Routes
+transactionRouter.get('/analytics/periods', adminAuthenticate, getTransactionByPeriods);
+
+//CRUDS
+transactionRouter.post('/', authenticate, createTransaction);
+transactionRouter.get('/', authenticate, getTransactions);
+transactionRouter.get('/:id', authenticate, getTransaction);
+transactionRouter.put('/:id', authenticate, updateTransaction);
+transactionRouter.delete('/:id', authenticate, deleteTransaction);
+transactionRouter.patch('/:id', adminAuthenticate, inactiveTransaction);
 
 export default transactionRouter;
