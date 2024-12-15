@@ -15,6 +15,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const excludedRoutes = [
       { path: '/auth/login', method: 'POST' },
       { path: '/auth/register', method: 'POST' },
+      { path: '/auth/transactions', method: 'POST' },
     ];
 
     const isExcluded = excludedRoutes.some(
