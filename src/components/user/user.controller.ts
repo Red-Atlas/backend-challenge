@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { userService } from './user.service.js';
+import { userService } from './user.service';
 
 export async function getUser(
   req: Request,

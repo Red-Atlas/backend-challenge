@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { propertyService } from './property.service.js';
+import { propertyService } from './property.service';
 import { TPaginationProperty } from './property.dto';
 import { TSortingType } from '../utils/sorting';
 

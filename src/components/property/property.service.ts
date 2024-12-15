@@ -1,10 +1,10 @@
 import { DeepPartial } from "typeorm";
-import { IProperty, TCreateProperty, TPaginationProperty, TPropertyGeoLocation } from "./property.dto.js";
-import { Property } from "./property.entity.js";
-import { TSortingType } from "../utils/sorting.js";
-import { AppDataSource } from "../../db.js";
-import { applyFilters, TPagination } from "./utils/filtersPagination.js";
-import { getPaginationParams } from "../utils/pagination.js";
+import { IProperty, TCreateProperty, TPaginationProperty, TPropertyGeoLocation } from "./property.dto";
+import { Property } from "./property.entity";
+import { TSortingType } from "../utils/sorting";
+import { AppDataSource } from "../../db";
+import { applyFilters, TPagination } from "./utils/filtersPagination";
+import { getPaginationParams } from "../utils/pagination";
 
 async function findOne({
   filter,
@@ -121,7 +121,7 @@ async function getAveragePricesBySector() {
     .createQueryBuilder('property')
     .innerJoin('property.advertisement', 'advertisement')
     .select('property.sector', 'sector')
-    .addSelect('AVG(advertisement.price)', 'price')
+    .addSelect('ROUND(AVG(advertisement.price), 2)', 'price')
     .where('property.active = :active', { active: true })
     .groupBy('property.sector')
     .orderBy('price', 'DESC')

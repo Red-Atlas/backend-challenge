@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate } from '../../middlewares/authenticate.js';
+import { authenticate } from '../../middlewares/authenticate';
 import {
   createTransaction,
   deleteTransaction,
@@ -8,8 +8,8 @@ import {
   getTransactions,
   inactiveTransaction,
   updateTransaction
-} from './transaction.controller.js';
-import { adminAuthenticate } from '../../middlewares/adminAuthenticate.js';
+} from './transaction.controller';
+import { adminAuthenticate } from '../../middlewares/adminAuthenticate';
 
 const transactionRouter = Router();
 

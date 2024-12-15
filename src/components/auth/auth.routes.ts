@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { currentUser, signIn, signUp } from './auth.controller.js';
+import { currentUser, signIn, signUp } from './auth.controller';
 import passport from 'passport';
-import './utils/googleStrategy.js'
+import './utils/googleStrategy'
 const authRouter = Router();
 
 authRouter.get('/current-user', currentUser)

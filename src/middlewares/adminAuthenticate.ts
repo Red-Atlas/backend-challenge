@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { authService } from "../components/auth/auth.service.js";
+import { authService } from "../components/auth/auth.service";
 
 export async function adminAuthenticate(
   req: Request,

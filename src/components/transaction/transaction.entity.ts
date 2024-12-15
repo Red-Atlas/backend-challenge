@@ -18,10 +18,10 @@ import {
   TransactionTypeEnum,
   TTransactionStatusType,
   TTransactionType
-} from './transaction.dto.js';
-import { User } from '../user/user.entity.js';
-import { Advertisement } from '../advertisement/advertisement.entity.js';
-import { Property } from '../property/property.entity.js';
+} from './transaction.dto';
+import { User } from '../user/user.entity';
+import { Advertisement } from '../advertisement/advertisement.entity';
+import { Property } from '../property/property.entity';
 
 @Entity()
 export class Transaction extends BaseEntity implements ITransaction {

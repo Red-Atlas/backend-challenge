@@ -1,8 +1,8 @@
-import { User } from "../user/user.entity.js";
-import { IBaseEntityType } from "../user/user.dto.js";
-import { Advertisement } from "../advertisement/advertisement.entity.js";
-import { Transaction } from "../transaction/transaction.entity.js";
-import { TPagination } from "./utils/filtersPagination.js";
+import { User } from "../user/user.entity";
+import { IBaseEntityType } from "../user/user.dto";
+import { Advertisement } from "../advertisement/advertisement.entity";
+import { Transaction } from "../transaction/transaction.entity";
+import { TPagination } from "./utils/filtersPagination";
 
 export enum PropertySectorEnum {
   RESIDENTIAL = 'residential',

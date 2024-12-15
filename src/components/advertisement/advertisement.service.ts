@@ -1,7 +1,7 @@
 import { DeepPartial } from "typeorm";
-import { Advertisement } from "./advertisement.entity.js";
-import { IAdvertisement, TCreateAdvertisement } from "./advertisement.dto.js";
-import { AppDataSource } from "../../db.js";
+import { Advertisement } from "./advertisement.entity";
+import { IAdvertisement, TCreateAdvertisement } from "./advertisement.dto";
+import { AppDataSource } from "../../db";
 
 async function findOne({
   filter,

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { advertisementService } from './advertisement.service.js';
+import { advertisementService } from './advertisement.service';
 
 export async function getAdvertisement(
   req: Request,

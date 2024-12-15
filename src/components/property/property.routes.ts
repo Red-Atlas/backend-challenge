@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate } from '../../middlewares/authenticate.js';
+import { authenticate } from '../../middlewares/authenticate';
 import {
   createProperty,
   deleteProperty,
@@ -15,8 +15,8 @@ import {
   findPropertiesWithinRadius,
   findPropertiesOrderedByProximity,
   calculateTotalArea,
-} from './property.controller.js';
-import { adminAuthenticate } from '../../middlewares/adminAuthenticate.js';
+} from './property.controller';
+import { adminAuthenticate } from '../../middlewares/adminAuthenticate';
 
 const propertyRouter = Router();
 

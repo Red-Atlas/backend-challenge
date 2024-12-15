@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { transactionService } from './transaction.service.js';
+import { transactionService } from './transaction.service';
 
 export async function getTransaction(
   req: Request,

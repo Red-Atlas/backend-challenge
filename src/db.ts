@@ -1,18 +1,7 @@
 import './config/env.js';
 import { DataSource } from 'typeorm';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { join } from 'path';
 
-// Define __dirname manualmente
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-console.log("__filename", __filename)
-console.log("__dirname", __dirname)
-console.log("hosttt",process.env.DB_HOST)
-console.log("portsss", process.env.DB_PORT)
-console.log("usernamee", process.env.DB_USERNAME)
-console.log("passwordd", process.env.DB_PASSWORD)
-console.log("database", process.env.DB_NAME)
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: process.env.DB_HOST,
@@ -26,14 +15,7 @@ export const AppDataSource = new DataSource({
     rejectUnauthorized: process.env.NODE_ENV == "production",
   },
   // migrationsRun: true,
-  entities: [
-    process.env.NODE_ENV === "production"
-      ? "dist/components/**/**.entity.js"
-      : join(__dirname + "/components/**/**.entity.{ts,js}"),
-  ],
-  migrations: [
-    process.env.NODE_ENV === "production"
-      ? "dist/migrations/*.js"
-      : join(__dirname + "/migrations/*.{ts,js}"),
+  entities: [join(__dirname + "/components/**/*.entity.{ts, js}")],
+  migrations: [join(__dirname + "/migrations/*.{ts, js}")
   ],
 });

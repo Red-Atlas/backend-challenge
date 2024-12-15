@@ -1,6 +1,6 @@
 import "reflect-metadata";
-import app from './app.js';
-import { AppDataSource } from './db.js';
+import app from '../api/index';
+import { AppDataSource } from './db';
 import http from 'http';
 
 export async function main() {

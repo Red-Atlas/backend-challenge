@@ -1,6 +1,6 @@
-import { Property } from "../property/property.entity.js";
-import { Transaction } from "../transaction/transaction.entity.js";
-import { IBaseEntityType } from "../user/user.dto.js";
+import { Property } from "../property/property.entity";
+import { Transaction } from "../transaction/transaction.entity";
+import { IBaseEntityType } from "../user/user.dto";
 
 export enum AdvertisementStatusEnum {
   FOR_SALE = 'for_sale',

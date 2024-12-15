@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { createUser, deleteUser, getUser, getUsers, inactiveUser, updateUser } from './user.controller.js';
-import { authenticate } from '../../middlewares/authenticate.js';
-import { adminAuthenticate } from '../../middlewares/adminAuthenticate.js';
+import { createUser, deleteUser, getUser, getUsers, inactiveUser, updateUser } from './user.controller';
+import { authenticate } from '../../middlewares/authenticate';
+import { adminAuthenticate } from '../../middlewares/adminAuthenticate';
 
 const userRouter = Router();
 

@@ -1,5 +1,5 @@
-import { Property } from "../property/property.entity.js";
-import { ITransaction } from "../transaction/transaction.dto.js";
+import { Property } from "../property/property.entity";
+import { ITransaction } from "../transaction/transaction.dto";
 
 export interface IBaseEntityType {
   id: string;

@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { verify } from 'argon2';
-import { IUser } from '../user/user.dto.js';
-import { JWTPayload } from './auth.dto.js';
-import { userService } from '../user/user.service.js';
-import { User } from '../user/user.entity.js';
+import { IUser } from '../user/user.dto';
+import { JWTPayload } from './auth.dto';
+import { userService } from '../user/user.service';
+import { User } from '../user/user.entity';
 
 function signJWT({
   user,
@@ -60,7 +60,6 @@ async function signIn({
 
   // Compare passwords with argon2
   const compare = await verify(user.password, password);
-
   if (!compare) {
     throw new Error('invalid-credentials');
   }

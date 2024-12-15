@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ES2020",
+    "module": "CommonJS",
+    "target": "ES2019",
     "baseUrl": ".",
+    "allowJs": true,
     "moduleResolution": "node",
     "outDir": "dist",
     "esModuleInterop": true,
@@ -14,6 +15,10 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
   },
-  "include": ["src/**/*.ts"],
+  "ts-node": {
+    "experimentalSpecifierResolution": "node",
+    "esm": true
+  },
+  "include": ["src/**/*.ts", "api/app.ts", "src/migrations/**/*"],
   "exclude": ["node_modules", "dist"]
 }

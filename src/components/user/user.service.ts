@@ -1,7 +1,7 @@
 import { DeepPartial } from "typeorm";
-import { validationInputCreateUser } from "./utils/validation.js";
-import { IUser } from "./user.dto.js";
-import { User } from "./user.entity.js";
+import { validationInputCreateUser } from "./utils/validation";
+import { IUser } from "./user.dto";
+import { User } from "./user.entity";
 
 async function findOne({
   filter,
@@ -20,7 +20,9 @@ async function find(filter?: Partial<Omit<IUser, 'property'>>): Promise<Array<Us
 
 async function update({
   id, data
-}: { id: IUser['id'], data: Partial<User> }): Promise<{ success: boolean, message: string }> {
+}: {
+  id: IUser['id'], data: Omit<Partial<User>, 'password'>
+}): Promise<{ success: boolean, message: string }> {
   await findOne({ filter: { id } });
 
   await User.update({ id }, data)

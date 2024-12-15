@@ -6,14 +6,13 @@ import {
   UpdateDateColumn,
   BaseEntity,
   BeforeInsert,
-  BeforeUpdate,
   OneToMany,
   Relation,
 } from 'typeorm';
-import { IUser, TUserRole, UserRole } from './user.dto.js';
+import { IUser, TUserRole, UserRole } from './user.dto';
 import { hash } from 'argon2';
-import { Transaction } from '../transaction/transaction.entity.js';
-import { Property } from '../property/property.entity.js';
+import { Transaction } from '../transaction/transaction.entity';
+import { Property } from '../property/property.entity';
 
 @Entity()
 export class User extends BaseEntity implements IUser {
@@ -35,9 +34,6 @@ export class User extends BaseEntity implements IUser {
   @Column({ type: 'enum', enum: Object.keys(UserRole), default: 'USER'})
   role: TUserRole;
 
-  @Column({ type: 'varchar', nullable: true })
-  phone: string;
-
   @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions: Relation<Transaction[]>;
 
@@ -46,6 +42,9 @@ export class User extends BaseEntity implements IUser {
 
   @Column({ type: 'varchar', nullable: true })
   googleId: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  phone: string;
 
   @Column({ type: 'boolean', default: true })
   active: boolean;
@@ -56,23 +55,14 @@ export class User extends BaseEntity implements IUser {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  private previousPassword?: string;
-
-  @BeforeUpdate()
-  setPreviousPassword() {
-    this.previousPassword = this.password;
-  }
-
   @BeforeInsert()
-  @BeforeUpdate()
   async hashPassword() {
     if (!this.password) {
       return;
     }
     if (this.password.length < 6) {
       throw new Error('Password must be at least 6 characters long')
-    }
-    if (!this.previousPassword || this.previousPassword !== this.password) {
+    } else {
       this.password = (await hash(this.password, {})).toString();
     }
   }
