@@ -6,7 +6,7 @@ import userRouter from './components/user/user.routes.js';
 import authRouter from './components/auth/auth.routes.js';
 import transactionRouter from './components/transaction/transaction.routes.js';
 import propertyRouter from './components/property/property.routes.js';
-import advertisementsRouter from 'components/advertisement/advertisement.routes.js';
+import advertisementsRouter from './components/advertisement/advertisement.routes.js';
 import session from 'express-session';
 import passport from 'passport';
 

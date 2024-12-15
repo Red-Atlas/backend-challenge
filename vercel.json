@@ -1,10 +1,5 @@
 {
-    "rewrites": [
-      {
-        "source": "/(.*)",
-        "destination": "dist/index.js"
-      }
-    ],
-    "installCommand": "npm install",
-    "buildCommand": "npm run build"
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+  "installCommand": "npm install",
+  "buildCommand": "npm run build"
 }

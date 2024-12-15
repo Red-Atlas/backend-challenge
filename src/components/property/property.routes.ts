@@ -16,7 +16,7 @@ import {
   findPropertiesOrderedByProximity,
   calculateTotalArea,
 } from './property.controller.js';
-import { adminAuthenticate } from 'middlewares/adminAuthenticate.js';
+import { adminAuthenticate } from '../../middlewares/adminAuthenticate.js';
 
 const propertyRouter = Router();
 

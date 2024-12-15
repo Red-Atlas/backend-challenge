@@ -9,7 +9,7 @@ import {
   inactiveAdvertisement,
   updateAdvertisement
 } from './advertisement.controller.js';
-import { adminAuthenticate } from 'middlewares/adminAuthenticate.js';
+import { adminAuthenticate } from '../../middlewares/adminAuthenticate.js';
 
 const advertisementsRouter = Router();
 

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { propertyService } from './property.service.js';
 import { TPaginationProperty } from './property.dto';
-import { TSortingType } from 'components/utils/sorting';
+import { TSortingType } from '../utils/sorting';
 
 export async function getProperty(
   req: Request,

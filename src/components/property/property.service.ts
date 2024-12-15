@@ -2,9 +2,9 @@ import { DeepPartial } from "typeorm";
 import { IProperty, TCreateProperty, TPaginationProperty, TPropertyGeoLocation } from "./property.dto.js";
 import { Property } from "./property.entity.js";
 import { TSortingType } from "../utils/sorting.js";
-import { AppDataSource } from "db.js";
+import { AppDataSource } from "../../db.js";
 import { applyFilters, TPagination } from "./utils/filtersPagination.js";
-import { getPaginationParams } from "components/utils/pagination.js";
+import { getPaginationParams } from "../utils/pagination.js";
 
 async function findOne({
   filter,

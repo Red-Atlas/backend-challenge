@@ -1,4 +1,4 @@
-import { Property } from "components/property/property.entity.js";
+import { Property } from "../property/property.entity.js";
 import { Advertisement } from "../advertisement/advertisement.entity.js";
 import { IBaseEntityType } from "../user/user.dto.js";
 import { User } from "../user/user.entity.js";
