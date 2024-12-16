@@ -159,6 +159,8 @@ Despliegue: https://node-backend-challenge.onrender.com/
 ### Desafíos encontrados
 - Trabajar con Postgis fue un desafio ya que nunca lo habia implementado, fue interesante poder manejar la herramienta y conocer todo lo que puede hacer con Postgres.
 
+- Tuve un percance con el deploy con Vercel, no me estaba tomando la base de datos de Postgres y al realizar un llamado a algun query me daba error que no encontraba la entidad, pienso que podria ser por algun tema de configuracion ya que obligaba a tener el proyecto en la carpeta /api al hacer el deploy.
+
 ### Decisiones tecnicas
 - El diagrama de la BD, se realizo con las entidades indicadas, y las relaciones se indican en este diagrama para mejor visualizacion: https://dbdiagram.io/d/backend-challenge-66344da25b24a634d06407d2
 - En el query de valuation, se realizo con solo SQL para maximizar el rendimiento de la consulta, se realizo un paginado para aun mas mayor rendimiento y sin relaciones.
