@@ -57,7 +57,7 @@ async function inactiveProperty(id: IProperty['id']): Promise<Property> {
 
   return property.save()
 }
-
+// property pagination with sort
 async function getPropertiesPagination(
   data: TPaginationProperty & TSortingType
 ) {
@@ -89,7 +89,7 @@ async function getPropertiesPagination(
     },
   });
 }
-
+// Graphic distribution by sector
 async function getDistributionBySector() {
   const propertyRepository = AppDataSource.getRepository(Property);
 
@@ -100,7 +100,7 @@ async function getDistributionBySector() {
     .groupBy('property.sector')
     .getRawMany();
 }
-
+//Graphics properties by type
 async function getPropertiesByType() {
   const propertyRepository = AppDataSource.getRepository(Property);
 
@@ -113,7 +113,7 @@ async function getPropertiesByType() {
     .groupBy('advertisement.propertyType')
     .getRawMany();
 }
-
+// Graphic average prices by sector
 async function getAveragePricesBySector() {
   const propertyRepository = AppDataSource.getRepository(Property);
 
@@ -127,7 +127,7 @@ async function getAveragePricesBySector() {
     .orderBy('price', 'DESC')
     .getRawMany()
 }
-
+// Properties with valuation
 async function getPropertiesWithValuation(data: TPagination) {
   const propertyRepository = AppDataSource.getRepository(Property);
   const { limit, page } = getPaginationParams(data.page, data.perPage);
@@ -173,7 +173,7 @@ async function getPropertiesWithValuation(data: TPagination) {
     },
   });
 }
-
+// Geo-location find properties within radius
 async function findPropertiesWithinRadius(data: TPropertyGeoLocation & TPagination) {
   const propertyRepository = AppDataSource.getRepository(Property);
   const { longitude, latitude, radiusKm } = data
@@ -206,7 +206,7 @@ async function findPropertiesWithinRadius(data: TPropertyGeoLocation & TPaginati
     },
   }
 }
-
+// Geo-location find properties ordered by proximity
 async function findPropertiesOrderedByProximity(
   data: Omit<TPropertyGeoLocation, 'radiusKm'> & TPagination
 ) {
@@ -241,7 +241,7 @@ async function findPropertiesOrderedByProximity(
     },
   }
 }
-
+// Geo-location calculate total area (doesnt work) :(
 async function calculateTotalArea(sectorPolygon: any) {
   const propertyRepository = AppDataSource.getRepository(Property);
 

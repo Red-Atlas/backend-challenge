@@ -1,12 +1,12 @@
-import '../src/config/env';
+import './config/env';
 import express from 'express';
 import cors from 'cors';
-import { errorHandler, notFoundHandler } from '../src/middlewares/errorHandlers';
-import userRouter from '../src/components/user/user.routes';
-import authRouter from '../src/components/auth/auth.routes';
-import transactionRouter from '../src/components/transaction/transaction.routes';
-import propertyRouter from '../src/components/property/property.routes';
-import advertisementsRouter from '../src/components/advertisement/advertisement.routes';
+import { errorHandler, notFoundHandler } from './middlewares/errorHandlers';
+import userRouter from './components/user/user.routes';
+import authRouter from './components/auth/auth.routes';
+import transactionRouter from './components/transaction/transaction.routes';
+import propertyRouter from './components/property/property.routes';
+import advertisementsRouter from './components/advertisement/advertisement.routes';
 import session from 'express-session';
 import passport from 'passport';
 

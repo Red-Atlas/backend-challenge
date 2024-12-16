@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import app from '../api/index';
+import app from './app';
 import { AppDataSource } from './db';
 import http from 'http';
 

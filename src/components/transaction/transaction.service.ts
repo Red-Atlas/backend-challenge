@@ -52,7 +52,7 @@ async function inactiveTransaction(id: ITransaction['id']): Promise<Transaction>
 
   return transaction.save()
 }
-
+// Graphic transactions by periods
 async function getTransactionByPeriods(){
   const transactionRepository = AppDataSource.getRepository(Transaction);
   

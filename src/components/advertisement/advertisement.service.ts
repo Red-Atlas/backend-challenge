@@ -52,7 +52,7 @@ async function inactiveAdvertisement(id: IAdvertisement['id']): Promise<Advertis
 
   return advertisement.save()
 }
-
+// Graphic get advertisement price range
 async function getAdvertisementsPriceRange(){
   const advertisementRepository = AppDataSource.getRepository(Advertisement);
   

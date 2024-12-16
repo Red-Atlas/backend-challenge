@@ -19,6 +19,5 @@ export function applyFilters(
   if (maxArea) qb.andWhere("property.area <= :maxArea", { maxArea })
   if (minYearBuilt) qb.andWhere("property.yearBuilt >= :minYearBuilt", { minYearBuilt })
   if (maxYearBuilt) qb.andWhere("property.yearBuilt <= :maxYearBuilt", { maxYearBuilt })
-  console.log("soy qb", qb)
   return qb;
 }
