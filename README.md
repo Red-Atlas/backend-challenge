@@ -132,3 +132,63 @@ Es indispensable que el proyecto esté **desplegado** en un servicio gratuito pa
 ---
 
 ### 🚀 ¡Buena suerte!
+
+
+### Eduardo Sequeira Comments
+
+Despliegue: https://node-backend-challenge.onrender.com/
+
+"Todos las rutas alternativas tienen /api"
+
+(El servicio de render por ser un plan free el despliegue, a los 15 minutos de no tener consultas detiene los servicios, al realizar la primera consulta puede demorar un poco ya que reinicia el proyecto, tomar en consideracion)
+
+### Ejecucion de proyecto
+- Realizar npm install, y ejecutar **npm run dev** ya realiza el build, (preferible ejecutar **npm run build** primero)
+- Generar migraciones BD, ejecutar **npm run m:gen src/migrations/"nameOfMigration"**
+- Ejecutar migraciones hacia la BD, ejecutar **m:run**
+- Testing, ejecutar **npm run test**
+- agregar archivo .env en carpeta raiz con las siguientes env:
+
+DB_HOST=ep-long-cloud-a5l3vnlo.us-east-2.aws.neon.tech
+DB_PORT=5432
+DB_USERNAME=backend-challenge_owner
+DB_PASSWORD=5KRlurEVX0wf
+DB_NAME=backend-challenge
+NODE_ENV=dev
+JWT_SECRET=1f9fdac764fc6b8cdaa98a14f12f442346742b7bcafdb82128e5df54235ee532
+GOOGLE_CLIENT_ID=1006200694710-jtr3m3ur0e1un5k21ihkk8b9l9t7efvn.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_CALLBACK_URL=http://localhost:3000/api/auth/google/callback
+SESSION_SECRET=5c8f8832c1a8bf44db90e312674345fbb8cddcfa6e6b5e8b5ab1677e24b7a8c7
+PORT=3000
+
+- usuario admin para las consultas privadas:
+
+{
+	"email":"admin@gmail.com",
+	"password":"edu123456"
+}
+
+- el servidor se ejecuta en http://localhost:3000
+
+### Introduccion
+-El objetivo del challenge fue desarrollar una aplicacion backend donde los endpoints debian ser funcional, eficiente y capaz de manejar gran cantidad de datos
+
+### Enfoque
+- Enfoqué mi desarrollo en lograr una arquitectura modular, con el objetivo de garantizar componentes altamente reutilizables y un proyecto más organizado. Para ello, implementé un esquema en el que cada módulo (por ejemplo, usuarios, propiedades, etc.) tiene su propia carpeta, dentro de la cual se encuentra toda la lógica relacionada, como controladores, servicios, entidades, y utilidades. Este enfoque evita la dispersión de archivos en el proyecto y facilita la navegación y el mantenimiento del código.
+
+- prioricé la implementación de funcionalidades esenciales desde el principio. Para consultas complejas a la base de datos, opté por escribirlas directamente en SQL, lo que permitió maximizar la eficiencia en términos de rendimiento y tiempo de ejecución.
+
+### Desafíos encontrados
+- Trabajar con Postgis fue un desafio ya que nunca lo habia implementado, fue interesante poder manejar la herramienta y conocer todo lo que puede hacer con Postgres.
+
+- Tuve un percance con el deploy con Vercel, no me estaba tomando la base de datos de Postgres y al realizar un llamado a algun query me daba error que no encontraba la entidad, pienso que podria ser por algun tema de configuracion ya que obligaba a tener el proyecto en la carpeta /api al hacer el deploy.
+
+### Decisiones tecnicas
+- El diagrama de la BD, se realizo con las entidades indicadas, y las relaciones se indican en este diagrama para mejor visualizacion: https://dbdiagram.io/d/backend-challenge-66344da25b24a634d06407d2
+- En el query de valuation, se realizo con solo SQL para maximizar el rendimiento de la consulta, se realizo un paginado para aun mas mayor rendimiento y sin relaciones.
+- Se añadieron indices en los diferentes atributos donde se requieren busquedas complejas en los diferentes modelos para el rendimiento
+- Se modularizaron todos las funciones principales de los diferentes modulos en los .services
+- Se implemento la propiedad de "active" en todos los modelos para implementar un soft delete (borrado logico) ya que es de buena practica no eliminar cosas importantes de la BD. En todos los findOne se buscan los modelos con filtro { active: true } por si se decide implementar el borrado logico.
+- Google Auth con OAuth, me parecio interesante implementar google auth como servicio para el sign-up y sign-in y adjuntarlo con el JWT (El response de el google auth devolvera el login token jwt en el url query)
+- El despliegue se realizo con la imagen de docker creada, El servicio de despliegue fue: Render

@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2019",
+    "baseUrl": ".",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "emitDecoratorMetadata": true,
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+  },
+  "ts-node": {
+    "experimentalSpecifierResolution": "node",
+    "esm": true
+  },
+  "include": ["src/**/*.ts", "api/app.ts", "src/migrations/**/*", "jest.config.ts"],
+  "exclude": [
+    "node_modules",
+    "dist", "**/__tests__",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
+}
