@@ -62,7 +62,10 @@ abstract class BaseController {
 
   async deleteById(req: Request, res: Response, next: NextFunction) {
     try {
-      const deletedEntity = await this.service.deleteById(req.params.id);
+      const deletedEntity = await this.service.deleteById(
+        req.params.id,
+        req["_user"].id
+      );
 
       res.status(200).json({
         data: deletedEntity,
