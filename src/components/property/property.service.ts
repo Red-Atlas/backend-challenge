@@ -241,22 +241,6 @@ async function findPropertiesOrderedByProximity(
     },
   }
 }
-// Geo-location calculate total area (doesnt work) :(
-async function calculateTotalArea(sectorPolygon: any) {
-  const propertyRepository = AppDataSource.getRepository(Property);
-
-  return propertyRepository
-    .createQueryBuilder('property')
-    .select(`SUM(ST_Area(ST_Transform(property.location, 3857)))`, 'total_area')
-    .where(
-      `ST_Within(
-        property.location,
-        ST_GeomFromGeoJSON(:sector)
-      )`,
-      { sector: JSON.stringify(sectorPolygon) }
-    )
-    .getRawOne();
-}
 
 export const propertyService = Object.freeze({
   findOne,
@@ -272,5 +256,4 @@ export const propertyService = Object.freeze({
   getAveragePricesBySector,
   findPropertiesWithinRadius,
   findPropertiesOrderedByProximity,
-  calculateTotalArea,
 })

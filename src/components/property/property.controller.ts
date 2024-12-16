@@ -165,14 +165,3 @@ export async function findPropertiesOrderedByProximity(
     next(error);
   }
 };
-
-export async function calculateTotalArea(
-  req: Request, res: Response, next: NextFunction
-): Promise<any> {
-  try {
-    const totalArea = await propertyService.calculateTotalArea(req.body)
-    return res.status(200).json({ success: true, data: totalArea })
-  } catch (error) {
-    next(error);
-  }
-};

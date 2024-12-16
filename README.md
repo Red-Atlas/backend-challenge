@@ -142,6 +142,12 @@ Despliegue: https://node-backend-challenge.onrender.com/
 
 (El servicio de render por ser un plan free el despliegue, a los 15 minutos de no tener consultas detiene los servicios, al realizar la primera consulta puede demorar un poco ya que reinicia el proyecto, tomar en consideracion)
 
+### Ejecucion de proyecto
+- Realizar npm install, y ejecutar **npm run dev** ya realiza el build, (preferible ejecutar **npm run build** primero)
+- Generar migraciones BD, ejecutar **npm run m:gen src/migrations/"nameOfMigration"**
+- Ejecutar migraciones hacia la BD, ejecutar **m:run**
+- Testing, ejecutar **npm run test**
+
 ### Introduccion
 -El objetivo del challenge fue desarrollar una aplicacion backend donde los endpoints debian ser funcional, eficiente y capaz de manejar gran cantidad de datos
 

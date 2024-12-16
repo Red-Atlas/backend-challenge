@@ -14,7 +14,6 @@ import {
   getPropertiesWithValuation,
   findPropertiesWithinRadius,
   findPropertiesOrderedByProximity,
-  calculateTotalArea,
 } from './property.controller';
 import { adminAuthenticate } from '../../middlewares/adminAuthenticate';
 
@@ -30,7 +29,6 @@ propertyRouter.get('/analytics/average-price-by-sector', adminAuthenticate, getA
 // Geo-Location Routes
 propertyRouter.get('/geo-location/within-radius', authenticate, findPropertiesWithinRadius);
 propertyRouter.get('/geo-location/ordered-by-proximity', authenticate, findPropertiesOrderedByProximity);
-propertyRouter.get('/geo-location/calculate-area', authenticate, calculateTotalArea);
 
 // CRUDS
 propertyRouter.post('/', authenticate, createProperty);
