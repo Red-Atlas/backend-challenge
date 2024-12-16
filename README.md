@@ -1,134 +1,128 @@
-# Backend Challenge - Mid-Level
 
-## Descripción
+# Backend Challenge: API para Gestión Inmobiliaria
 
-El objetivo de este desafío es construir una API para gestionar información catastral e inmobiliaria. Evaluaremos tu habilidad para manejar grandes volúmenes de datos, diseñar estructuras eficientes y aplicar buenas prácticas de desarrollo backend.
+## Descripción General
+Esta API RESTful permite la gestión de bienes raíces, incluyendo propiedades, transacciones, usuarios y listados. El sistema está diseñado para cubrir necesidades de administración tanto de usuarios como de operaciones inmobiliarias.
 
-## Requisitos Técnicos
+## Tecnologías Utilizadas
+- **Framework**: NestJS (Node.js)
+- **Base de Datos**: PostgreSQL
+- **ORM**: TypeORM
+- **Autenticación**: JSON Web Tokens (JWT)
+- **Contenerización**: Docker y Docker Compose
 
-- **Lenguaje**: Node.js + TypeScript
-- **Framework**: Express
-- **Base de Datos**: PostgreSQL 
-- **ORM**: TypeORM (usando migraciones)
-- **Autenticación**: JWT
+## Enlace del Deploy
+[Enlace del deploy en EC2](http://ec2-54-198-100-159.compute-1.amazonaws.com:3000/)
 
-## Requisitos del Proyecto
+## Sugerencias para Configuración
+Es recomendable generar un archivo `.env` y modificar el archivo `docker-compose.yml` si lo desean. Si solo quieren crear el `.env`, sugeriría usar las siguientes configuraciones para que puedan probar bien las migraciones:
 
-1. **Endpoints CRUD** para las siguientes entidades, por ejemplo:
-   - **Propiedades**:
-     - `address`
-     - `area`
-     - `ownerName`
-     - `sector` (`residential`, `commercial`, `industrial`, `agricultural`)
-   - **Anuncios** asociados a Propiedades:
-     - `price`
-     - `status` (`for_sale`, `for_lease`)
-     - `propertyType` (`apartment`, `house`, `retail`, `land`, `industrial`)
-   - **Transactions** asociadas a Propiedades:
-     - `address`
-     - `type` (`sale_purchase`, `lease`, `mortgage`, `judicial sale`, `other`)
-     - `date`
-     - `price`
-2. **Autenticación y Autorización**:
-   - Implementar autenticación con JWT.
-   - Roles (`user`, `admin`) para restringir acceso a ciertos endpoints.
+```env
+JWT_SECRET_KEY=miClaveSecretaSuperSegura
+JWT_EXPIRES=1h
+DB_HOST=db
+DB_PORT=5432
+DB_USERNAME=username
+DB_PASSWORD=password
+DB_NAME=red-atlas-db
+PORT=3000
+```
 
-3. **Consultas Complejas**:
+## Enlace de la Documentación
+[Documentación en Postman](https://documenter.getpostman.com/view/12355254/2sAYHxoPw1)  
+**Nota**: Por defecto, la URL de la API es `http://localhost:3000`.
 
-   - **Filtros Avanzados 🔎**
-     - Listar propiedades aplicando filtros múltiples utilizando todas las entidades relacionables.
-     - Aplicar ordenamiento y paginación.
+## Instalación y Ejecución
+1. Primero, instala las dependencias y ejecuta el servidor en modo desarrollo:
 
-   - **Integración de Carga Pesada 🚛**  
-     En esta tarea, deberás demostrar tu capacidad para manejar grandes volúmenes de datos y calcular dinámicamente valores adicionales para enriquecer la información presentada en los endpoints.
+    ```bash
+    npm run start:dev
+    ```
 
-     - **Requerimiento**:  
-       Lista todas las parcelas y calcula dinámicamente un campo adicional como `valuation`. Este valor debe ser generado en base a una fórmula que definas según las propiedades de las parcelas (por ejemplo, `valuation = area * property price`).  
+2. Si necesitas ejecutar migraciones, utiliza los siguientes comandos:
 
-     - **Ejemplo de Fórmula**:  
-       ```text
-       valuation = area (en m²) * precio promedio por m² (basado en propiedades del mismo sector)
-       ```
+    ```bash
+    # Generar migraciones
+    npm run migration:generate -- -d ./src/data-source.ts src/migrations/initial
 
-     - **Objetivo**:  
-       Optimizar la generación de este campo para que la consulta pueda manejar eficientemente un gran número de registros.
+    # Ejecutar migraciones
+    npm run migration:run -- -d ./src/data-source.ts
+    ```
 
-     - **Tips para Implementación**:
-       - Considera usar una consulta SQL con `JOIN` y agregaciones para calcular el `valuation` directamente desde la base de datos.
-       - Si usas cálculos en el backend, asegúrate de que estén optimizados y no ralenticen las respuestas.
-       - Piensa en cómo podrías manejar este cálculo para un gran volumen de datos sin afectar el rendimiento.
+## Requisitos Previos
+- Node.js v latest
+- Docker y Docker Compose
 
-## Extras Opcionales 🌟
-- **OAuth 2.0**.
-- **Docker Compose**.
-- **Pruebas unitarias**.
-- **Consultas Complejas:**
-  - **Geográficas (Altamente Valorado)🌍**  
-     Esta funcionalidad es opcional, pero implementarla mostrará tu capacidad para manejar cálculos espaciales y datos geográficos, algo que valoraremos enormemente. Si decides implementarlo, sumarás puntos extra en tu evaluación. 🚀
+## Configurar el Entorno
+Las variables de entorno están definidas en el archivo `docker-compose.yml`. Estas variables incluyen:
 
-     Puedes simular coordenadas geográficas para las Propiedades/Anuncios, almacenándolas en la base de datos y utilizando una librería como [PostGIS](https://postgis.net/) para realizar cálculos espaciales. Aquí tienes algunas ideas interesantes:  
-     - **Filtrado por Radio 🧭**: Filtra propiedades dentro de un radio de X kilómetros de una ubicación específica.  
-     - **Orden por Proximidad 📍**: Ordena propiedades según su cercanía a un punto de referencia.  
-     - **Cálculo de Áreas 🌐**: Calcula las áreas totales de propiedades en un sector o región.
+- **JWT_SECRET_KEY**: Clave secreta para JWT.
+- **JWT_EXPIRES**: Tiempo de expiración del JWT (por defecto "1h").
+- **DB_HOST**: Host del contenedor de la base de datos.
+- **DB_PORT**: Puerto de la base de datos (usualmente "5432").
+- **DB_USERNAME**: Usuario de la base de datos.
+- **DB_PASSWORD**: Contraseña de la base de datos.
+- **DB_NAME**: Nombre de la base de datos.
+- **PORT**: Puerto donde corre la API (por defecto "3000").
 
-     💡 **Consejo**: Si no estás familiarizado con cálculos espaciales, PostGIS es un excelente punto de partida. ¡Inténtalo! 🎉
+## Construir y Levantar los Contenedores
+Ejecuta el siguiente comando para levantar la aplicación y la base de datos en contenedores:
 
-   - **Análisis de Datos (un gran plus)📊**  
-     Esta funcionalidad no es obligatoria, pero destacará tu capacidad técnica y será un diferencial importante en la evaluación. Es ideal para demostrar habilidades en análisis y generación de datos útiles para dashboards. 🚀
+```bash
+docker-compose up --build
+```
 
-     En esta sección, deberás generar información que permita representar datos relevantes en gráficos y/o dashboards. Algunas ideas que puedes implementar:
+Esto iniciará la aplicación NestJS y la base de datos PostgreSQL.
 
-     - **Distribución por Sector 🏙️**  
-       Agrupa y cuenta las propiedades o anuncios según su sector (`residential`, `commercial`, etc.) y proporciona datos listos para gráficos de barras o tortas.
+**Nota**: Se creó un usuario administrador(En produccion) preconfigurado en la base de datos con las siguientes credenciales:
 
-     - **Tipos de Propiedades 🏡**  
-       Genera estadísticas sobre la cantidad de propiedades por tipo (`apartment`, `house`, etc.). ¡Perfecto para gráficos de pastel o barras apiladas!
+```json
+{
+  "username": "admin",
+  "email": "admin@gmail.com",
+  "password": "Admin1234!"
+}
+```
 
-     - **Tendencias en el Tiempo 📅**  
-       Analiza las transacciones por fecha (`sale_purchase`, `lease`) y agrúpalas por meses o años. Esto es ideal para gráficos de líneas o áreas, mostrando tendencias en precios o actividad del mercado.
+Este usuario puede ser utilizado para pruebas iniciales.
 
-     - **Rangos de Precios 💰**  
-       Divide los anuncios o propiedades en rangos de precios (por ejemplo, `0-50k`, `50k-100k`, etc.) y calcula cuántos anuncios están en cada rango. ¡Ideal para histogramas!
+## Estructura del Proyecto
+### Módulos Clave
+- **Usuarios (User)**: Gestión de usuarios, autenticación y autorización.
+- **Propiedades (Property)**: Administración de información relacionada con propiedades inmobiliarias.
+- **Listados (Listing)**: Gestión de las propiedades disponibles para compra/venta.
+- **Transacciones (Transaction)**: Registro de las operaciones financieras relacionadas con las propiedades.
 
-     - **Sectores más Caros 🔝**  
-       Calcula el precio promedio por sector o tipo de propiedad para destacar las zonas o tipos de mayor valor.
+## Desafíos y Soluciones
+1. **Configuración de Relaciones Complejas en TypeORM**
+    - Desafío: Gestionar relaciones bidireccionales y definir estrategias de carga.
+    - Solución: Se priorizó un diseño modular y consultas eficientes para reducir la carga innecesaria en memoria.
 
-     💡 **Implementación sugerida**: Utiliza funciones avanzadas de PostgreSQL como `GROUP BY` y `AVG` o librerías específicas para análisis en tu backend.
+2. **Implementación de Autenticación y Seguridad**
+    - Desafío: Proteger rutas sensibles y manejar la validación de usuarios.
+    - Solución:
+        - Uso de JWT para autenticar usuarios.
+        - Middleware de NestJS para verificar tokens en rutas protegidas.
 
-## Requisito Adicional: **Despliegue** 🌐🚀
+3. **Despliegue en Entornos Contenerizados**
+    - Desafío: Configurar un entorno Docker funcional para NestJS y PostgreSQL.
+    - Solución: Diseño de un `docker-compose.yml` simplificado para asegurar consistencia entre entornos. En el caso de computadoras con chips M1/M2/M3, la librería `bcrypt` se reemplazó por `bcryptjs` para garantizar la compatibilidad.
 
-Es indispensable que el proyecto esté **desplegado** en un servicio gratuito para poder testearlo directamente. Esto asegura que el evaluador pueda interactuar con tu API en un entorno real.
+4. **Manejo de Datos a Gran Escala**
+    - Desafío: Optimizar consultas en tablas con datos extensos.
+    - Solución: Implementación de índices en columnas clave y uso de funciones avanzadas de PostgreSQL para optimizar el rendimiento.
 
-### **Pasos sugeridos para el despliegue**:
-1. **Configura tu proyecto**:  
-   Asegúrate de que pueda ejecutarse en un entorno en la nube. Utiliza variables de entorno para manejar configuraciones sensibles. ⚙️  
-2. **Base de Datos**:  
-   Crea una base de datos PostgreSQL gratuita utilizando servicios como [**Neon**](https://neon.tech/) o [**ElephantSQL**](https://www.elephantsql.com/). 🐘  
-3. **Despliega tu proyecto**:  
-   - [**Guía para Vercel**](https://vercel.com/docs/concepts/projects/overview) 🌐 
-4. **Proporciona el enlace al proyecto desplegado** en el README de tu fork. ¡Asegúrate de que esté funcional y accesible! 🌟  
+5. **Respuestas Adaptativas**
+    - Desafío: Diseñar valores de respuesta lo más adaptativos posibles para facilitar la integración con el frontend y la creación de dashboards.
+    - Solución: Estructuración clara y detallada de las respuestas para que sean fáciles de consumir por desarrolladores frontend.
 
-## Instrucciones de Entrega
+6. **Diseño de Endpoints y Relaciones**
+    - Desafío: Definir los endpoints necesarios considerando las relaciones entre las entidades.
+    - Solución: Priorización de endpoints clave con un enfoque en simplicidad y funcionalidad inmediata.
 
-- Realiza un fork de este repositorio: [Red-Atlas/backend-challenge](https://github.com/Red-Atlas/backend-challenge).
-- Crea un branch con tu nombre completo en el formato: nombre-apellido.
-- Sube tu código al branch correspondiente.
-- Desplegar la aplicación en un servicio gratuito como **Vercel**.
+## Decisiones Técnicas
+1. **Elección de TypeORM**
+    - Pros: Integración fluida con NestJS y facil implementacion con migraciones.
 
-- Incluye en el README del fork:
-  - Instrucciones en el `README.md` para instalar y ejecutar la aplicación.
-  - El enlace al proyecto desplegado.
-  - Un resumen de tu solución (enfoque, desafíos, decisiones técnicas).
-  - Realiza un pull request a este repositorio.
-
-### Criterios de Evaluación
-- Diseño de la base de datos y relaciones entre entidades.
-- Eficiencia y optimización en las consultas.
-- Buenas prácticas: modularidad, estructura del proyecto y manejo de errores.
-- Implementación de validaciones y seguridad.
-- Extras implementados.
-- **Despliegue funcional y accesible**.
-
----
-
-### 🚀 ¡Buena suerte!
+2. **Arquitectura Modular**
+    - Cada recurso (User, Transaction, Listing, Property) está encapsulado en un módulo, lo que mejora la mantenibilidad y escalabilidad.
