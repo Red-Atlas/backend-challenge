@@ -15,7 +15,7 @@ abstract class BaseController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      await this.service.create(req.body);
+      await this.service.create(req.body, req["_user"].id);
 
       res.status(201).json({ response: "Creación realizada con éxito" });
     } catch (error) {
@@ -47,6 +47,7 @@ abstract class BaseController {
     try {
       const updatedEntity = await this.service.updateById(
         req.params.id,
+        req["_user"].id,
         req.body
       );
 

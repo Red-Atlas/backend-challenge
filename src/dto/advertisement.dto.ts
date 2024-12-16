@@ -5,11 +5,8 @@ import {
   IsPositive,
   IsEnum,
   IsObject,
-  IsInt,
   IsDefined,
 } from "class-validator";
-
-import { Property } from "../entities/Property.entity";
 
 class AdvertisementDTO {
   @IsNumber({}, { message: "El precio debe ser numerico" })
@@ -27,6 +24,12 @@ class AdvertisementDTO {
   @IsObject()
   @IsDefined()
   property: {
+    id: number;
+  };
+
+  @IsObject()
+  @IsDefined()
+  user: {
     id: number;
   };
 }

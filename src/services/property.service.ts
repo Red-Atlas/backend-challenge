@@ -4,10 +4,12 @@ import PropertyDTO from "../dto/property.dto";
 import validateInput from "../utils/classValidator.util";
 
 class PropertyService {
-  static async create(data) {
+  static async create(data, userId) {
     try {
       const propertiesValidated = data.properties.map(async (property) => {
-        const result = await validateInput(property, PropertyDTO);
+        const propertyWithUserId = { ...property, user: { id: userId } };
+
+        const result = await validateInput(propertyWithUserId, PropertyDTO);
 
         return {
           ...result,
@@ -66,15 +68,26 @@ class PropertyService {
     try {
       return await Property.findOne({
         where: { id },
+        relations: {
+          user: true,
+        },
       });
     } catch (error) {
       throw error;
     }
   }
 
-  static async updateById(id, data) {
+  static async updateById(id, userId, data) {
     try {
-      const result = await validateInput(data, PropertyDTO);
+      const result = await validateInput(
+        {
+          ...data,
+          user: {
+            id: userId,
+          },
+        },
+        PropertyDTO
+      );
 
       const propertyParsed = {
         ...result,
@@ -84,14 +97,36 @@ class PropertyService {
         },
       };
 
+      const property = await this.findById(id);
+
+      if (property?.user.id != userId) {
+        const error = new Error(
+          "No tiene permisos para modificar esta propiedad"
+        );
+        error["statusCode"] = 403;
+
+        throw error;
+      }
+
       return await Property.update({ id }, propertyParsed);
     } catch (error) {
       throw error;
     }
   }
 
-  static async deleteById(id) {
+  static async deleteById(id, userId) {
     try {
+      const property = await this.findById(id);
+
+      if (property?.user.id != userId) {
+        const error = new Error(
+          "No tiene permisos para eliminar esta propiedad"
+        );
+        error["statusCode"] = 403;
+
+        throw error;
+      }
+
       await Property.delete({ id });
     } catch (error) {
       if (error.code == "23503") {

@@ -8,6 +8,8 @@ import {
   IsArray,
   ArrayMinSize,
   ArrayMaxSize,
+  IsObject,
+  IsDefined,
 } from "class-validator";
 import { Type } from "class-transformer";
 
@@ -28,9 +30,15 @@ class PropertyDTO {
   })
   sector: string;
 
+  @IsObject()
+  @IsDefined()
+  user: {
+    id: number;
+  };
+
   @IsArray()
-  @ArrayMinSize(2, { message: "Coordinates must have exactly two elements" })
-  @ArrayMaxSize(2, { message: "Coordinates must have exactly two elements" })
+  @ArrayMinSize(2, { message: "Las coordenadas deben tenes 2 elementos" })
+  @ArrayMaxSize(2, { message: "Las coordenadas deben tenes 2 elementos" })
   @Type(() => Number)
   coordinates: [number, number];
 }

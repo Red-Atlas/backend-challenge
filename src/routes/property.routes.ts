@@ -31,8 +31,8 @@ router.get(
 
 router.post(
   "/",
-  // passportCb("jwt"),
-  //checkRole([Role.USER, Role.ADMIN]),
+  passportCb("jwt"),
+  checkRole([Role.USER, Role.ADMIN]),
   property.create
 );
 

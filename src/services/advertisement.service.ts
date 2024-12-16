@@ -4,11 +4,17 @@ import AdvertisementDTO from "../dto/advertisement.dto";
 import validateInput from "../utils/classValidator.util";
 
 class AdvertisementService {
-  static async create(data) {
+  static async create(data, userId) {
     try {
       const advertisementsValidated = data.advertisements.map(
-        async (advertisement) =>
-          await validateInput(advertisement, AdvertisementDTO)
+        async (advertisement) => {
+          const advertisementWithUserId = {
+            ...advertisement,
+            user: { id: userId },
+          };
+
+          return await validateInput(advertisementWithUserId, AdvertisementDTO);
+        }
       );
 
       await Advertisement.save(await Promise.all(advertisementsValidated));
@@ -39,15 +45,38 @@ class AdvertisementService {
         where: {
           id,
         },
+        relations: {
+          user: true,
+          property: true,
+        },
       });
     } catch (error) {
       throw error;
     }
   }
 
-  static async updateById(id, data) {
+  static async updateById(id, userId, data) {
     try {
-      const result = await validateInput(data, AdvertisementDTO);
+      const result = await validateInput(
+        {
+          ...data,
+          user: {
+            id: userId,
+          },
+        },
+        AdvertisementDTO
+      );
+
+      const advertisement = await this.findById(id);
+
+      if (advertisement?.user.id != userId) {
+        const error = new Error(
+          "No tiene permisos para modificar este anuncio"
+        );
+        error["statusCode"] = 403;
+
+        throw error;
+      }
 
       return await Advertisement.update({ id }, result);
     } catch (error) {
@@ -55,8 +84,19 @@ class AdvertisementService {
     }
   }
 
-  static async deleteById(id) {
+  static async deleteById(id, userId) {
     try {
+      const advertisement = await this.findById(id);
+
+      if (advertisement?.user.id != userId) {
+        const error = new Error(
+          "No tiene permisos para modificar este anuncio"
+        );
+        error["statusCode"] = 403;
+
+        throw error;
+      }
+
       await Advertisement.delete({ id });
     } catch (error) {
       throw error;

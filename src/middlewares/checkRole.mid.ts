@@ -1,12 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { Role } from "../schemas/role.enum";
 
 function checkRole(allowedRoles: number[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (allowedRoles.includes(Role.PUBLIC)) return next();
-
-      const userRol = req["_user"]?.role || Role.PUBLIC;
+      const userRol = req["_user"]?.role;
 
       if (!allowedRoles.includes(userRol)) {
         const error = new Error(

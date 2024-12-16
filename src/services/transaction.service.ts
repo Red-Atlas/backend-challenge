@@ -5,10 +5,17 @@ import TransactionDTO from "../dto/transaction.dto";
 import validateInput from "../utils/classValidator.util";
 
 class TransactionService {
-  static async create(data) {
+  static async create(data, userId) {
     try {
       const transactionsValidated = data.transactions.map(
-        async (transaction) => await validateInput(transaction, TransactionDTO)
+        async (transaction) => {
+          const transactionWithUserId = {
+            ...transaction,
+            user: { id: userId },
+          };
+
+          return await validateInput(transactionWithUserId, TransactionDTO);
+        }
       );
 
       await Transaction.save(await Promise.all(transactionsValidated));
@@ -39,15 +46,38 @@ class TransactionService {
         where: {
           id,
         },
+        relations: {
+          user: true,
+          property: true,
+        },
       });
     } catch (error) {
       throw error;
     }
   }
 
-  static async updateById(id, data) {
+  static async updateById(id, userId, data) {
     try {
-      const result = await validateInput(data, TransactionDTO);
+      const result = await validateInput(
+        {
+          ...data,
+          user: {
+            id: userId,
+          },
+        },
+        TransactionDTO
+      );
+
+      const transaction = await this.findById(id);
+
+      if (transaction?.user.id != userId) {
+        const error = new Error(
+          "No tiene permisos para modificar este transacción"
+        );
+        error["statusCode"] = 403;
+
+        throw error;
+      }
 
       return await Transaction.update({ id }, result);
     } catch (error) {
@@ -55,8 +85,19 @@ class TransactionService {
     }
   }
 
-  static async deleteById(id) {
+  static async deleteById(id, userId) {
     try {
+      const transaction = await this.findById(id);
+
+      if (transaction?.user.id != userId) {
+        const error = new Error(
+          "No tiene permisos para modificar este transacción"
+        );
+        error["statusCode"] = 403;
+
+        throw error;
+      }
+
       await Transaction.delete({ id });
     } catch (error) {
       throw error;

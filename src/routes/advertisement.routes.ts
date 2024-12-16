@@ -18,14 +18,14 @@ router.get(
 
 router.post(
   "/",
-  //passportCb("jwt"),
-  //checkRole([Role.USER, Role.ADMIN]),
+  passportCb("jwt"),
+  checkRole([Role.USER, Role.ADMIN]),
   advertisement.create
 );
 
-router.get("/", checkRole([Role.PUBLIC]), advertisement.findAll);
+router.get("/", advertisement.findAll);
 
-router.get("/:id", checkRole([Role.PUBLIC]), advertisement.findById);
+router.get("/:id", advertisement.findById);
 
 router.put(
   "/:id",

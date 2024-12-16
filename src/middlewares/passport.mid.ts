@@ -17,7 +17,9 @@ passport.use(
       try {
         const result = await validateInput({ email, password }, UserDTO);
 
-        const searchedUser = await User.findOne({ email: result.email });
+        const searchedUser = await User.findOne({
+          where: { email: result.email },
+        });
 
         if (searchedUser)
           return done(null, false, {
@@ -90,6 +92,9 @@ passport.use(
     async (payload: { id: number; role: number }, done) => {
       const searchedUser = await User.findOne({
         where: { id: payload.id },
+        relations: {
+          auth: true,
+        },
       });
 
       if (!searchedUser)

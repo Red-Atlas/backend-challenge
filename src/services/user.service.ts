@@ -24,9 +24,9 @@ class UserService {
     }
   }
 
-  static async findOne(where) {
+  static async findOne(opt) {
     try {
-      return await User.findOne({ where });
+      return await User.findOne(opt);
     } catch (error) {
       throw error;
     }

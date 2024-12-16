@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 
 import { Property } from "./Property.entity";
+import { User } from "./User.entity";
 
 import { PropertyType, Status } from "../schemas/advertisement.enum";
 
@@ -33,6 +34,9 @@ class Advertisement {
 
   @ManyToOne(() => Property, (property) => property.advertisements)
   property: Property;
+
+  @ManyToOne(() => User, (user) => user.transactions)
+  user: User;
 }
 
 export { Advertisement };

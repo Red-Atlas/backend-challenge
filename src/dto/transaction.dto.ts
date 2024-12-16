@@ -6,6 +6,8 @@ import {
   IsEnum,
   Matches,
   IsString,
+  IsObject,
+  IsDefined,
 } from "class-validator";
 
 class TransactionDTO {
@@ -26,6 +28,18 @@ class TransactionDTO {
       "tipos admitidos: sale_purchase, lease, mortgage, judicialSale, other",
   })
   type: string;
+
+  @IsObject()
+  @IsDefined()
+  property: {
+    id: number;
+  };
+
+  @IsObject()
+  @IsDefined()
+  user: {
+    id: number;
+  };
 }
 
 export default TransactionDTO;
