@@ -26,7 +26,6 @@ export class TransactionsController {
 
   // Crear una nueva transacción
   @Post()
-  @Roles(Role.ADMIN, Role.USER)
   create(@Body() createTransactionDto: CreateTransactionDto) {
     return this.transactionsService.create(createTransactionDto);
   }
