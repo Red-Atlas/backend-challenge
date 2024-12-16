@@ -19,6 +19,11 @@
     "experimentalSpecifierResolution": "node",
     "esm": true
   },
-  "include": ["src/**/*.ts", "api/app.ts", "src/migrations/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*.ts", "api/app.ts", "src/migrations/**/*", "jest.config.ts"],
+  "exclude": [
+    "node_modules",
+    "dist", "**/__tests__",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }

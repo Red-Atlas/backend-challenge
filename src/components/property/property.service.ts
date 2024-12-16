@@ -258,7 +258,6 @@ async function calculateTotalArea(sectorPolygon: any) {
     .getRawOne();
 }
 
-
 export const propertyService = Object.freeze({
   findOne,
   find,

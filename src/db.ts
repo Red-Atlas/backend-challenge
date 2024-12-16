@@ -1,4 +1,4 @@
-import './config/env.js';
+import './config/env';
 import { DataSource } from 'typeorm';
 import { join } from 'path';
 
