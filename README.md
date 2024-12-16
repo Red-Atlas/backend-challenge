@@ -1,134 +1,64 @@
 # Backend Challenge - Mid-Level
 
-## Descripción
+## Instalación
 
-El objetivo de este desafío es construir una API para gestionar información catastral e inmobiliaria. Evaluaremos tu habilidad para manejar grandes volúmenes de datos, diseñar estructuras eficientes y aplicar buenas prácticas de desarrollo backend.
+1. npm install
 
-## Requisitos Técnicos
+2. Opcional. En caso de querer utilizar una base de datos local ejecutar el comando 'npm run build' para traspilar y 'npm run migration:run' para realizar la migración inicial.
 
-- **Lenguaje**: Node.js + TypeScript
-- **Framework**: Express
-- **Base de Datos**: PostgreSQL 
-- **ORM**: TypeORM (usando migraciones)
-- **Autenticación**: JWT
+## RESUMEN
 
-## Requisitos del Proyecto
+La API utiliza el patron MVCs, con repositorios para poder encapsular y separar la lógica de las transacciones con la base de datos de la lógica de negocio.
+Establece un sistema de roles el cual ofrece la posibilidad de limitar el acceso a ciertos recursos, siendo el rol básico de un usuario logueado (0) el que se crea por defecto al crear un usuario, y un usuario administrador (1) con posibilidades de acceso a informes estadísticos, entre otras cosas.
+(Datos del usuario administrador: email: admin@prueba.com password: Prueba123!).
 
-1. **Endpoints CRUD** para las siguientes entidades, por ejemplo:
-   - **Propiedades**:
-     - `address`
-     - `area`
-     - `ownerName`
-     - `sector` (`residential`, `commercial`, `industrial`, `agricultural`)
-   - **Anuncios** asociados a Propiedades:
-     - `price`
-     - `status` (`for_sale`, `for_lease`)
-     - `propertyType` (`apartment`, `house`, `retail`, `land`, `industrial`)
-   - **Transactions** asociadas a Propiedades:
-     - `address`
-     - `type` (`sale_purchase`, `lease`, `mortgage`, `judicial sale`, `other`)
-     - `date`
-     - `price`
-2. **Autenticación y Autorización**:
-   - Implementar autenticación con JWT.
-   - Roles (`user`, `admin`) para restringir acceso a ciertos endpoints.
+La misma cuenta con un sistema avanzado de filtros (más ejemplos en la documentación) que permite filtrar por varios campos mayores, menores, iguales al indicado por parametro.
+Se puede fitrar tanto por datos de la entidad solicitada, como de las entidades relacionadas a la misma.
 
-3. **Consultas Complejas**:
+También cuenta con un sistema de paginación modificable limitada a 50 registros.
 
-   - **Filtros Avanzados 🔎**
-     - Listar propiedades aplicando filtros múltiples utilizando todas las entidades relacionables.
-     - Aplicar ordenamiento y paginación.
+Se agregaron varios tipos de informes estadísticos propuestos en el ejercicio. Únicamente el usuario administrador tiene acceso.
 
-   - **Integración de Carga Pesada 🚛**  
-     En esta tarea, deberás demostrar tu capacidad para manejar grandes volúmenes de datos y calcular dinámicamente valores adicionales para enriquecer la información presentada en los endpoints.
+## CASOS DE USO
 
-     - **Requerimiento**:  
-       Lista todas las parcelas y calcula dinámicamente un campo adicional como `valuation`. Este valor debe ser generado en base a una fórmula que definas según las propiedades de las parcelas (por ejemplo, `valuation = area * property price`).  
+Supongamos que queremos obtener todos las anuncios. Sería tan fácil como hacer una solicitud de tipo GET a /advertisements.
+En caso de querer filtrar por determinados precios podríamos realizar la misma solicitud, agregándole como query param ?price[gte]=2000.
+Si quisieramos además solicitar información de la propiedad vinculada, podríamos agregarle?property.area[lt]=1000
 
-     - **Ejemplo de Fórmula**:  
-       ```text
-       valuation = area (en m²) * precio promedio por m² (basado en propiedades del mismo sector)
-       ```
+Los operadores disponibles son:
 
-     - **Objetivo**:  
-       Optimizar la generación de este campo para que la consulta pueda manejar eficientemente un gran número de registros.
+- gt: ">",
+- lt: "<",
+- gte: ">=",
+- lte: "<=",
+- eq: "=",
+- ne: "!=",
 
-     - **Tips para Implementación**:
-       - Considera usar una consulta SQL con `JOIN` y agregaciones para calcular el `valuation` directamente desde la base de datos.
-       - Si usas cálculos en el backend, asegúrate de que estén optimizados y no ralenticen las respuestas.
-       - Piensa en cómo podrías manejar este cálculo para un gran volumen de datos sin afectar el rendimiento.
+Los campos disponibles para filtrar son:
 
-## Extras Opcionales 🌟
-- **OAuth 2.0**.
-- **Docker Compose**.
-- **Pruebas unitarias**.
-- **Consultas Complejas:**
-  - **Geográficas (Altamente Valorado)🌍**  
-     Esta funcionalidad es opcional, pero implementarla mostrará tu capacidad para manejar cálculos espaciales y datos geográficos, algo que valoraremos enormemente. Si decides implementarlo, sumarás puntos extra en tu evaluación. 🚀
+Propiedades:
 
-     Puedes simular coordenadas geográficas para las Propiedades/Anuncios, almacenándolas en la base de datos y utilizando una librería como [PostGIS](https://postgis.net/) para realizar cálculos espaciales. Aquí tienes algunas ideas interesantes:  
-     - **Filtrado por Radio 🧭**: Filtra propiedades dentro de un radio de X kilómetros de una ubicación específica.  
-     - **Orden por Proximidad 📍**: Ordena propiedades según su cercanía a un punto de referencia.  
-     - **Cálculo de Áreas 🌐**: Calcula las áreas totales de propiedades en un sector o región.
+- area (con filtro de operadores)
+- address, sector (búsqueda sin operadores)
+- advertisements (para que me traiga los anuncios relacionados o aplicarles filtros a los mismos deberemos activar la relacion pasandole advertisement=true):
 
-     💡 **Consejo**: Si no estás familiarizado con cálculos espaciales, PostGIS es un excelente punto de partida. ¡Inténtalo! 🎉
+  - id y price (con filtro de operadores)
 
-   - **Análisis de Datos (un gran plus)📊**  
-     Esta funcionalidad no es obligatoria, pero destacará tu capacidad técnica y será un diferencial importante en la evaluación. Es ideal para demostrar habilidades en análisis y generación de datos útiles para dashboards. 🚀
+Anuncios:
 
-     En esta sección, deberás generar información que permita representar datos relevantes en gráficos y/o dashboards. Algunas ideas que puedes implementar:
+- price (con filtro de operadores)
+- status y type (búsqueda sin operadores)
+- property:
+  - area (con filtro de operadores)
 
-     - **Distribución por Sector 🏙️**  
-       Agrupa y cuenta las propiedades o anuncios según su sector (`residential`, `commercial`, etc.) y proporciona datos listos para gráficos de barras o tortas.
+Transacciones:
 
-     - **Tipos de Propiedades 🏡**  
-       Genera estadísticas sobre la cantidad de propiedades por tipo (`apartment`, `house`, etc.). ¡Perfecto para gráficos de pastel o barras apiladas!
+- price y date (con filtro de operadores)
+- type (búsqueda sin operadores)
+- property:
+  - area (con filtro de operadores)
 
-     - **Tendencias en el Tiempo 📅**  
-       Analiza las transacciones por fecha (`sale_purchase`, `lease`) y agrúpalas por meses o años. Esto es ideal para gráficos de líneas o áreas, mostrando tendencias en precios o actividad del mercado.
+## LINKS
 
-     - **Rangos de Precios 💰**  
-       Divide los anuncios o propiedades en rangos de precios (por ejemplo, `0-50k`, `50k-100k`, etc.) y calcula cuántos anuncios están en cada rango. ¡Ideal para histogramas!
-
-     - **Sectores más Caros 🔝**  
-       Calcula el precio promedio por sector o tipo de propiedad para destacar las zonas o tipos de mayor valor.
-
-     💡 **Implementación sugerida**: Utiliza funciones avanzadas de PostgreSQL como `GROUP BY` y `AVG` o librerías específicas para análisis en tu backend.
-
-## Requisito Adicional: **Despliegue** 🌐🚀
-
-Es indispensable que el proyecto esté **desplegado** en un servicio gratuito para poder testearlo directamente. Esto asegura que el evaluador pueda interactuar con tu API en un entorno real.
-
-### **Pasos sugeridos para el despliegue**:
-1. **Configura tu proyecto**:  
-   Asegúrate de que pueda ejecutarse en un entorno en la nube. Utiliza variables de entorno para manejar configuraciones sensibles. ⚙️  
-2. **Base de Datos**:  
-   Crea una base de datos PostgreSQL gratuita utilizando servicios como [**Neon**](https://neon.tech/) o [**ElephantSQL**](https://www.elephantsql.com/). 🐘  
-3. **Despliega tu proyecto**:  
-   - [**Guía para Vercel**](https://vercel.com/docs/concepts/projects/overview) 🌐 
-4. **Proporciona el enlace al proyecto desplegado** en el README de tu fork. ¡Asegúrate de que esté funcional y accesible! 🌟  
-
-## Instrucciones de Entrega
-
-- Realiza un fork de este repositorio: [Red-Atlas/backend-challenge](https://github.com/Red-Atlas/backend-challenge).
-- Crea un branch con tu nombre completo en el formato: nombre-apellido.
-- Sube tu código al branch correspondiente.
-- Desplegar la aplicación en un servicio gratuito como **Vercel**.
-
-- Incluye en el README del fork:
-  - Instrucciones en el `README.md` para instalar y ejecutar la aplicación.
-  - El enlace al proyecto desplegado.
-  - Un resumen de tu solución (enfoque, desafíos, decisiones técnicas).
-  - Realiza un pull request a este repositorio.
-
-### Criterios de Evaluación
-- Diseño de la base de datos y relaciones entre entidades.
-- Eficiencia y optimización en las consultas.
-- Buenas prácticas: modularidad, estructura del proyecto y manejo de errores.
-- Implementación de validaciones y seguridad.
-- Extras implementados.
-- **Despliegue funcional y accesible**.
-
----
-
-### 🚀 ¡Buena suerte!
+Documentación ==> https://documenter.getpostman.com/view/26489502/2sAYHzG2z4
+Deploy ==> https://backend-challenge-70q2lo05f-tomas-projects-3db80bcd.vercel.app
