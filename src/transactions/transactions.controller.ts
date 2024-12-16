@@ -24,7 +24,6 @@ import { Role } from 'src/users/enums/role.enum';
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
-  // Crear una nueva transacción
   @Post()
   create(@Body() createTransactionDto: CreateTransactionDto) {
     return this.transactionsService.create(createTransactionDto);
